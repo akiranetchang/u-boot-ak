@@ -1,0 +1,13 @@
+config RAM_PI
+	bool "Ram drivers support for SiFive SoCs"
+	depends on RAM && RISCV
+	default y
+	help
+	  This enables support for ram drivers of SiFive SoCs.
+
+config PI_DDR
+	bool "PI DDR driver"
+	depends on RAM_PI
+	default y if TARGET_PI_B88
+	help
+	  This enables DDR support for the platforms based on PI SoC.

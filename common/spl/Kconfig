@@ -456,7 +456,8 @@ config SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR
 		     ARCH_ROCKCHIP || ARCH_MVEBU ||  ARCH_SOCFPGA || \
 		     ARCH_AT91 || ARCH_ZYNQ || ARCH_KEYSTONE || OMAP34XX || \
 		     OMAP44XX || OMAP54XX || AM33XX || AM43XX || \
-		     TARGET_SIFIVE_UNLEASHED || TARGET_SIFIVE_UNMATCHED
+		     TARGET_SIFIVE_UNLEASHED || TARGET_SIFIVE_UNMATCHED || \
+		     TARGET_PI_B88
 	help
 	  Use sector number for specifying U-Boot location on MMC/SD in
 	  raw mode.
@@ -474,6 +475,7 @@ config SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR
 		         OMAP54XX || AM33XX || AM43XX || ARCH_K3
 	default 0x4000 if ARCH_ROCKCHIP
 	default 0x822 if TARGET_SIFIVE_UNLEASHED || TARGET_SIFIVE_UNMATCHED
+	default 0x822 if TARGET_PI_B88
 	help
 	  Address on the MMC to load U-Boot from, when the MMC is being used
 	  in raw mode. Units: MMC sectors (1 sector = 512 bytes).

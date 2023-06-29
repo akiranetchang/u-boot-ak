@@ -24,6 +24,10 @@ config TARGET_SIFIVE_UNMATCHED
 	bool "Support SiFive Unmatched Board"
 	select SYS_CACHE_SHIFT_6
 
+config TARGET_PI_B88
+	bool "Support Pi B88 Board"
+	select SYS_CACHE_SHIFT_6
+
 config TARGET_SIPEED_MAIX
 	bool "Support Sipeed Maix Board"
 	select SYS_CACHE_SHIFT_6
