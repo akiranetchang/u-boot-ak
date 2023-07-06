@@ -10,7 +10,7 @@ config SYS_CPU
 	default "a88"
 
 config SYS_CONFIG_NAME
-	default "pi_b88"
+	default "pi-b88"
 
 config SYS_TEXT_BASE
 	default 0x80200000 if SPL
@@ -28,7 +28,6 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 	select PI_A88
 	select ENV_IS_IN_SPI_FLASH
 	select SUPPORT_SPL
-	select CLK_PI_PRCI	
 	select RESET_PI	
 	select BINMAN
 	imply CMD_DHCP
