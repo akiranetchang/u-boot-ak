@@ -28,7 +28,8 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 	select PI_A88
 	select ENV_IS_IN_SPI_FLASH
 	select SUPPORT_SPL
-	select RESET_PI
+	select CLK_PI_PRCI	
+	select RESET_PI	
 	select BINMAN
 	imply CMD_DHCP
 	imply CMD_EXT2
