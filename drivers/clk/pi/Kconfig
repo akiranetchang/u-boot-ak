@@ -8,7 +8,7 @@ config CLK_PI
 
 config CLK_PI_PRCI
 	bool "PRCI driver for PI SoCs"
-	depends on CLK_SIFIVE
+	depends on CLK_PI
 	select CLK_ANALOGBITS_WRPLL_CLN28HPC
 	help
 	  Supports the Power Reset Clock interface (PRCI) IP block found in
