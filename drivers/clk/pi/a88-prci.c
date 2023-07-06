@@ -17,7 +17,7 @@
  */
 
 #include <dt-bindings/clock/sifive-fu740-prci.h>
-#include "sifive-prci.h"
+#include "pi-prci.h"
 #include <asm/io.h>
 
 int sifive_prci_fu740_pcieauxclk_enable(struct __prci_clock *pc, bool enable)
