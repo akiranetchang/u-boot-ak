@@ -8,7 +8,7 @@
 #ifndef __SIFIVE_CLK_FU740_PRCI_H
 #define __SIFIVE_CLK_FU740_PRCI_H
 
-#include "sifive-prci.h"
+#include "pi-prci.h"
 
 #define NUM_CLOCK_FU740		9
 
