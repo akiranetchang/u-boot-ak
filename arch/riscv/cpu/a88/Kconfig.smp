@@ -16,6 +16,7 @@ config PI_A88
 	imply SPL_CPU
 	imply SPL_OPENSBI
 	imply SPL_LOAD_FIT
+	imply SMP
 	imply CLK_PI
 	imply CLK_PI_PRCI
 	imply SIFIVE_CACHE
