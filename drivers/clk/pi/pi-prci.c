@@ -717,6 +717,7 @@ static int pi_clk_bind(struct udevice *dev)
 
 static const struct udevice_id pi_prci_ids[] = {
 	{ .compatible = "pi,pi-a88-prci", .data = (ulong)&prci_clk_a88 },
+	{ .compatible = "sifive,fu740-c000-prci", .data = (ulong)&prci_clk_a88 },
 	{ }
 };
 
