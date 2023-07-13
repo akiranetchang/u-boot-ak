@@ -4,7 +4,8 @@
  */
 
 #include "binman.dtsi"
-#include "fu740-c000-u-boot.dtsi"
+//#include "fu740-c000-u-boot.dtsi"
+#include "pi-b88-u-boot.dtsi"
 #include "fu740-hifive-unmatched-a00-ddr.dtsi"
 
 / {

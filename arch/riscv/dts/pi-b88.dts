@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /* Copyright (c) 2020 SiFive, Inc */
 
-#include "fu740-c000.dtsi"
+//#include "fu740-c000.dtsi"
+#include "pi-a88.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interrupt-controller/irq.h>
 
