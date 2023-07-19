@@ -24,7 +24,7 @@ config PI_A88
 	imply MACB
 	imply MII
 	imply SPI
-	imply SPI_SIFIVE
+	imply SPI_PI
 	imply MMC
 	imply MMC_SPI
 	imply MMC_BROKEN_CD

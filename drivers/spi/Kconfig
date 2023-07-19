@@ -409,6 +409,14 @@ config SPI_SIFIVE
 
 	  The SiFive SPI controller driver is found on various SiFive SoCs.
 
+config SPI_PI
+	bool "Pi SPI driver"
+	help
+	  This driver supports the Pi SPI IP. If unsure say N.
+	  Enable the Pi SPI controller driver.
+
+	  The Pi SPI controller driver is found on various SiFive SoCs.
+
 config SOFT_SPI
 	bool "Soft SPI driver"
 	help
