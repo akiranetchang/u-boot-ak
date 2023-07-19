@@ -153,7 +153,8 @@ Break.Set 0x0800734C /P	;SPL ops->request
 Break.Set riscv_cpu_setup /P	;SPL
 
 
-Break.Set sifive_spi_probe /P	;SPL
+;Break.Set sifive_spi_probe /P	;SPL
+Break.Set pi_spi_probe /P	;SPL
 
 
 
