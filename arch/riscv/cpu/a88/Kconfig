@@ -20,7 +20,7 @@ config PI_A88
 	imply CLK_PI_PRCI
 	imply SIFIVE_CACHE
 	imply SIFIVE_CCACHE
-	imply SIFIVE_SERIAL
+	imply PI_SERIAL
 	imply MACB
 	imply MII
 	imply SPI
