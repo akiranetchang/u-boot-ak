@@ -65,16 +65,16 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-struct sifive_ddrctl {
+struct pi_ddrctl {
 	volatile u32 denali_ctl[265];
 };
 
-struct sifive_ddrphy {
+struct pi_ddrphy {
 	volatile u32 denali_phy[1215];
 };
 
 /**
- * struct sifive_ddr_info
+ * struct pi_ddr_info
  *
  * @dev                         : pointer for the device
  * @info                        : UCLASS RAM information
@@ -83,23 +83,23 @@ struct sifive_ddrphy {
  * @ctrl                        : DDR control base address
  * @physical_filter_ctrl        : DDR physical filter control base address
  */
-struct sifive_ddr_info {
+struct pi_ddr_info {
 	struct udevice *dev;
 	struct ram_info info;
-	struct sifive_ddrctl *ctl;
-	struct sifive_ddrphy *phy;
+	struct pi_ddrctl *ctl;
+	struct pi_ddrphy *phy;
 	struct clk ddr_clk;
 	u32 *physical_filter_ctrl;
 };
 
 #if defined(CONFIG_SPL_BUILD)
-struct sifive_ddr_params {
-	struct sifive_ddrctl pctl_regs;
-	struct sifive_ddrphy phy_regs;
+struct pi_ddr_params {
+	struct pi_ddrctl pctl_regs;
+	struct pi_ddrphy phy_regs;
 };
 
-struct sifive_dmc_plat {
-	struct sifive_ddr_params ddr_params;
+struct pi_dmc_plat {
+	struct pi_ddr_params ddr_params;
 };
 
 /*
@@ -118,7 +118,7 @@ static void sdram_copy_to_reg(volatile u32 *dest,
 	}
 }
 
-static void sifive_ddr_setup_range_protection(volatile u32 *ctl, u64 end_addr)
+static void pi_ddr_setup_range_protection(volatile u32 *ctl, u64 end_addr)
 {
 	u32 end_addr_16kblocks = ((end_addr >> 14) & 0x7FFFFF) - 1;
 
@@ -135,7 +135,7 @@ static void sifive_ddr_setup_range_protection(volatile u32 *ctl, u64 end_addr)
 		     0x1 << PORT_ADDR_PROTECTION_EN_OFFSET);
 }
 
-static void sifive_ddr_start(volatile u32 *ctl, u32 *physical_filter_ctrl,
+static void pi_ddr_start(volatile u32 *ctl, u32 *physical_filter_ctrl,
 			     u64 ddr_end)
 {
 	volatile u64 *filterreg = (volatile u64 *)physical_filter_ctrl;
@@ -149,7 +149,7 @@ static void sifive_ddr_start(volatile u32 *ctl, u32 *physical_filter_ctrl,
 	filterreg[0] = 0x0f00000000000000UL | (ddr_end >> 2);
 }
 
-static void sifive_ddr_check_errata(u32 regbase, u32 updownreg)
+static void pi_ddr_check_errata(u32 regbase, u32 updownreg)
 {
 	u64 fails     = 0;
 	u32 dq        = 0;
@@ -202,7 +202,7 @@ static void sifive_ddr_check_errata(u32 regbase, u32 updownreg)
 	}
 }
 
-static u64 sifive_ddr_phy_fixup(volatile u32 *ddrphyreg)
+static u64 pi_ddr_phy_fixup(volatile u32 *ddrphyreg)
 {
 	u32 slicebase = 0;
 
@@ -213,7 +213,7 @@ static u64 sifive_ddr_phy_fixup(volatile u32 *ddrphyreg)
 		for (u32 reg = 0; reg < 4; reg++) {
 			u32 updownreg = readl(regbase + reg + ddrphyreg);
 
-			sifive_ddr_check_errata(regbase, updownreg);
+			pi_ddr_check_errata(regbase, updownreg);
 		}
 		slicebase += 128;
 	}
@@ -221,18 +221,18 @@ static u64 sifive_ddr_phy_fixup(volatile u32 *ddrphyreg)
 	return(0);
 }
 
-static u32 sifive_ddr_get_dram_class(volatile u32 *ctl)
+static u32 pi_ddr_get_dram_class(volatile u32 *ctl)
 {
 	u32 reg = readl(DENALI_CTL_0 + ctl);
 
 	return ((reg >> DRAM_CLASS_OFFSET) & 0xF);
 }
 
-static int sifive_ddr_setup(struct udevice *dev)
+static int pi_ddr_setup(struct udevice *dev)
 {
-	struct sifive_ddr_info *priv = dev_get_priv(dev);
-	struct sifive_dmc_plat *plat = dev_get_plat(dev);
-	struct sifive_ddr_params *params = &plat->ddr_params;
+	struct pi_ddr_info *priv = dev_get_priv(dev);
+	struct pi_dmc_plat *plat = dev_get_plat(dev);
+	struct pi_ddr_params *params = &plat->ddr_params;
 	volatile u32 *denali_ctl =  priv->ctl->denali_ctl;
 	volatile u32 *denali_phy =  priv->phy->denali_phy;
 	const u64 ddr_size = priv->info.size;
@@ -251,7 +251,7 @@ static int sifive_ddr_setup(struct udevice *dev)
 
 	sdram_copy_to_reg(priv->ctl->denali_ctl,
 			  params->pctl_regs.denali_ctl,
-			  sizeof(struct sifive_ddrctl));
+			  sizeof(struct pi_ddrctl));
 
 	/* phy reset */
 	for (i = DENALI_PHY_1152; i <= DENALI_PHY_1214; i++) {
@@ -285,7 +285,7 @@ static int sifive_ddr_setup(struct udevice *dev)
 	setbits_le32(DENALI_CTL_182 + denali_ctl,
 		     1 << DFI_PHY_RDLVL_GATE_MODE_OFFSET);
 
-	if (sifive_ddr_get_dram_class(denali_ctl) == DRAM_CLASS_DDR4) {
+	if (pi_ddr_get_dram_class(denali_ctl) == DRAM_CLASS_DDR4) {
 		/* Enable vref training DENALI_CTL_184 */
 		setbits_le32(DENALI_CTL_184 + denali_ctl, 1 << VREF_EN_OFFSET);
 	}
@@ -302,15 +302,15 @@ static int sifive_ddr_setup(struct udevice *dev)
 		     | (1 << MULTIPLE_OUT_OF_RANGE_OFFSET));
 
 	/* set up range protection */
-	sifive_ddr_setup_range_protection(denali_ctl, priv->info.size);
+	pi_ddr_setup_range_protection(denali_ctl, priv->info.size);
 
 	/* Mask off port command error interrupt DENALI_CTL_136 */
 	setbits_le32(DENALI_CTL_136 + denali_ctl,
 		     1 << PORT_COMMAND_CHANNEL_ERROR_OFFSET);
 
-	sifive_ddr_start(denali_ctl, priv->physical_filter_ctrl, ddr_end);
+	pi_ddr_start(denali_ctl, priv->physical_filter_ctrl, ddr_end);
 
-	sifive_ddr_phy_fixup(denali_phy);
+	pi_ddr_phy_fixup(denali_phy);
 
 	/* check size */
 	priv->info.size = get_ram_size((long *)(uintptr_t)priv->info.base,
@@ -329,9 +329,9 @@ static int sifive_ddr_setup(struct udevice *dev)
 }
 #endif
 
-static int sifive_ddr_probe(struct udevice *dev)
+static int pi_ddr_probe(struct udevice *dev)
 {
-	struct sifive_ddr_info *priv = dev_get_priv(dev);
+	struct pi_ddr_info *priv = dev_get_priv(dev);
 
 	/* Read memory base and size from DT */
 	fdtdec_setup_mem_size_base();
@@ -342,7 +342,7 @@ static int sifive_ddr_probe(struct udevice *dev)
 	int ret;
 	u32 clock = 0;
 
-	debug("sifive DDR probe\n");
+	debug("pi DDR probe\n");
 	priv->dev = dev;
 
 	ret = clk_get_by_index(dev, 0, &priv->ddr_clk);
@@ -369,43 +369,44 @@ static int sifive_ddr_probe(struct udevice *dev)
 		return ret;
 	}
 
-	priv->ctl = (struct sifive_ddrctl *)dev_read_addr_index_ptr(dev, 0);
-	priv->phy = (struct sifive_ddrphy *)dev_read_addr_index_ptr(dev, 1);
+	priv->ctl = (struct pi_ddrctl *)dev_read_addr_index_ptr(dev, 0);
+	priv->phy = (struct pi_ddrphy *)dev_read_addr_index_ptr(dev, 1);
 	priv->physical_filter_ctrl = (u32 *)dev_read_addr_index_ptr(dev, 2);
 
-	return sifive_ddr_setup(dev);
+	return pi_ddr_setup(dev);
 #endif
 
 	return 0;
 }
 
-static int sifive_ddr_get_info(struct udevice *dev, struct ram_info *info)
+static int pi_ddr_get_info(struct udevice *dev, struct ram_info *info)
 {
-	struct sifive_ddr_info *priv = dev_get_priv(dev);
+	struct pi_ddr_info *priv = dev_get_priv(dev);
 
 	*info = priv->info;
 
 	return 0;
 }
 
-static struct ram_ops sifive_ddr_ops = {
-	.get_info = sifive_ddr_get_info,
+static struct ram_ops pi_ddr_ops = {
+	.get_info = pi_ddr_get_info,
 };
 
-static const struct udevice_id sifive_ddr_ids[] = {
+static const struct udevice_id pi_ddr_ids[] = {
+	{ .compatible = "pi,pi-a88-ddr" },
 	{ .compatible = "sifive,fu540-c000-ddr" },
 	{ .compatible = "sifive,fu740-c000-ddr" },
 	{ }
 };
 
-U_BOOT_DRIVER(sifive_ddr) = {
-	.name = "sifive_ddr",
+U_BOOT_DRIVER(pi_ddr) = {
+	.name = "pi_ddr",
 	.id = UCLASS_RAM,
-	.of_match = sifive_ddr_ids,
-	.ops = &sifive_ddr_ops,
-	.probe = sifive_ddr_probe,
-	.priv_auto = sizeof(struct sifive_ddr_info),
+	.of_match = pi_ddr_ids,
+	.ops = &pi_ddr_ops,
+	.probe = pi_ddr_probe,
+	.priv_auto = sizeof(struct pi_ddr_info),
 #if defined(CONFIG_SPL_BUILD)
-	.plat_auto = sizeof(struct sifive_dmc_plat),
+	.plat_auto = sizeof(struct pi_dmc_plat),
 #endif
 };
