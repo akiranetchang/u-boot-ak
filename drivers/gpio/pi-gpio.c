@@ -13,7 +13,7 @@
 #include <asm/gpio.h>
 #include <linux/bitops.h>
 
-static int sifive_gpio_probe(struct udevice *dev)
+static int pi_gpio_probe(struct udevice *dev)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
@@ -34,7 +34,7 @@ static int sifive_gpio_probe(struct udevice *dev)
 	return 0;
 }
 
-static void sifive_update_gpio_reg(void *bptr, u32 offset, bool value)
+static void pi_update_gpio_reg(void *bptr, u32 offset, bool value)
 {
 	void __iomem *ptr = (void __iomem *)bptr;
 
@@ -47,7 +47,7 @@ static void sifive_update_gpio_reg(void *bptr, u32 offset, bool value)
 		writel(old & ~bit, ptr);
 }
 
-static int sifive_gpio_direction_input(struct udevice *dev, u32 offset)
+static int pi_gpio_direction_input(struct udevice *dev, u32 offset)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
@@ -56,13 +56,13 @@ static int sifive_gpio_direction_input(struct udevice *dev, u32 offset)
 		return -EINVAL;
 
 	/* Configure gpio direction as input */
-	sifive_update_gpio_reg(plat->base + GPIO_INPUT_EN,  offset, true);
-	sifive_update_gpio_reg(plat->base + GPIO_OUTPUT_EN, offset, false);
+	pi_update_gpio_reg(plat->base + GPIO_INPUT_EN,  offset, true);
+	pi_update_gpio_reg(plat->base + GPIO_OUTPUT_EN, offset, false);
 
 	return 0;
 }
 
-static int sifive_gpio_direction_output(struct udevice *dev, u32 offset,
+static int pi_gpio_direction_output(struct udevice *dev, u32 offset,
 					int value)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
@@ -72,16 +72,16 @@ static int sifive_gpio_direction_output(struct udevice *dev, u32 offset,
 		return -EINVAL;
 
 	/* Configure gpio direction as output */
-	sifive_update_gpio_reg(plat->base + GPIO_OUTPUT_EN, offset, true);
-	sifive_update_gpio_reg(plat->base + GPIO_INPUT_EN,  offset, false);
+	pi_update_gpio_reg(plat->base + GPIO_OUTPUT_EN, offset, true);
+	pi_update_gpio_reg(plat->base + GPIO_INPUT_EN,  offset, false);
 
 	/* Set the output state of the pin */
-	sifive_update_gpio_reg(plat->base + GPIO_OUTPUT_VAL, offset, value);
+	pi_update_gpio_reg(plat->base + GPIO_OUTPUT_VAL, offset, value);
 
 	return 0;
 }
 
-static int sifive_gpio_get_value(struct udevice *dev, u32 offset)
+static int pi_gpio_get_value(struct udevice *dev, u32 offset)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
@@ -102,7 +102,7 @@ static int sifive_gpio_get_value(struct udevice *dev, u32 offset)
 	return val ? HIGH : LOW;
 }
 
-static int sifive_gpio_set_value(struct udevice *dev, u32 offset, int value)
+static int pi_gpio_set_value(struct udevice *dev, u32 offset, int value)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
@@ -110,12 +110,12 @@ static int sifive_gpio_set_value(struct udevice *dev, u32 offset, int value)
 	if (offset > uc_priv->gpio_count)
 		return -EINVAL;
 
-	sifive_update_gpio_reg(plat->base + GPIO_OUTPUT_VAL, offset, value);
+	pi_update_gpio_reg(plat->base + GPIO_OUTPUT_VAL, offset, value);
 
 	return 0;
 }
 
-static int sifive_gpio_get_function(struct udevice *dev, unsigned int offset)
+static int pi_gpio_get_function(struct udevice *dev, unsigned int offset)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	u32	outdir, indir, val;
@@ -141,20 +141,21 @@ static int sifive_gpio_get_function(struct udevice *dev, unsigned int offset)
 	return val;
 }
 
-static const struct udevice_id sifive_gpio_match[] = {
+static const struct udevice_id pi_gpio_match[] = {
+	{ .compatible = "pi,gpio0" },
 	{ .compatible = "sifive,gpio0" },
 	{ }
 };
 
-static const struct dm_gpio_ops sifive_gpio_ops = {
-	.direction_input        = sifive_gpio_direction_input,
-	.direction_output       = sifive_gpio_direction_output,
-	.get_value              = sifive_gpio_get_value,
-	.set_value              = sifive_gpio_set_value,
-	.get_function		= sifive_gpio_get_function,
+static const struct dm_gpio_ops pi_gpio_ops = {
+	.direction_input        = pi_gpio_direction_input,
+	.direction_output       = pi_gpio_direction_output,
+	.get_value              = pi_gpio_get_value,
+	.set_value              = pi_gpio_set_value,
+	.get_function		= pi_gpio_get_function,
 };
 
-static int sifive_gpio_of_to_plat(struct udevice *dev)
+static int pi_gpio_of_to_plat(struct udevice *dev)
 {
 	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 
@@ -165,12 +166,12 @@ static int sifive_gpio_of_to_plat(struct udevice *dev)
 	return 0;
 }
 
-U_BOOT_DRIVER(gpio_sifive) = {
-	.name	= "gpio_sifive",
+U_BOOT_DRIVER(gpio_pi) = {
+	.name	= "gpio_pi",
 	.id	= UCLASS_GPIO,
-	.of_match = sifive_gpio_match,
-	.of_to_plat = of_match_ptr(sifive_gpio_of_to_plat),
+	.of_match = pi_gpio_match,
+	.of_to_plat = of_match_ptr(pi_gpio_of_to_plat),
 	.plat_auto	= sizeof(struct sifive_gpio_plat),
-	.ops	= &sifive_gpio_ops,
-	.probe	= sifive_gpio_probe,
+	.ops	= &pi_gpio_ops,
+	.probe	= pi_gpio_probe,
 };
