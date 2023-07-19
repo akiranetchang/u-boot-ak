@@ -287,37 +287,37 @@ struct prci_clk_desc {
 	size_t num_clks;
 };
 
-void sifive_prci_ethernet_release_reset(struct __prci_data *pd);
-void sifive_prci_ddr_release_reset(struct __prci_data *pd);
-void sifive_prci_cltx_release_reset(struct __prci_data *pd);
+void pi_prci_ethernet_release_reset(struct __prci_data *pd);
+void pi_prci_ddr_release_reset(struct __prci_data *pd);
+void pi_prci_cltx_release_reset(struct __prci_data *pd);
 
 /* Core clock mux control */
-void sifive_prci_coreclksel_use_hfclk(struct __prci_data *pd);
-void sifive_prci_coreclksel_use_corepll(struct __prci_data *pd);
-void sifive_prci_coreclksel_use_final_corepll(struct __prci_data *pd);
-void sifive_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd);
-void sifive_prci_corepllsel_use_corepll(struct __prci_data *pd);
-void sifive_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd);
-void sifive_prci_hfpclkpllsel_use_hfpclkpll(struct __prci_data *pd);
+void pi_prci_coreclksel_use_hfclk(struct __prci_data *pd);
+void pi_prci_coreclksel_use_corepll(struct __prci_data *pd);
+void pi_prci_coreclksel_use_final_corepll(struct __prci_data *pd);
+void pi_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd);
+void pi_prci_corepllsel_use_corepll(struct __prci_data *pd);
+void pi_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd);
+void pi_prci_hfpclkpllsel_use_hfpclkpll(struct __prci_data *pd);
 
-unsigned long sifive_prci_wrpll_round_rate(struct __prci_clock *pc,
+unsigned long pi_prci_wrpll_round_rate(struct __prci_clock *pc,
 					   unsigned long rate,
 					   unsigned long *parent_rate);
 
 /* Linux clock framework integration */
-int sifive_prci_wrpll_set_rate(struct __prci_clock *pc,
+int pi_prci_wrpll_set_rate(struct __prci_clock *pc,
 			       unsigned long rate,
 			       unsigned long parent_rate);
 
-unsigned long sifive_prci_wrpll_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_wrpll_recalc_rate(struct __prci_clock *pc,
 					    unsigned long parent_rate);
 
-unsigned long sifive_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
 					       unsigned long parent_rate);
 
-unsigned long sifive_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
 						   unsigned long parent_rate);
 
-int sifive_prci_clock_enable(struct __prci_clock *pc, bool enable);
+int pi_prci_clock_enable(struct __prci_clock *pc, bool enable);
 
 #endif /* __PI_CLK_PI_PRCI_H */

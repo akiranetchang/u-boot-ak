@@ -191,7 +191,7 @@ static void __prci_wrpll_write_cfg1(struct __prci_data *pd,
 	__prci_writel(enable, pwd->cfg1_offs, pd);
 }
 
-unsigned long sifive_prci_wrpll_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_wrpll_recalc_rate(struct __prci_clock *pc,
 					    unsigned long parent_rate)
 {
 	struct __prci_wrpll_data *pwd = pc->pwd;
@@ -199,7 +199,7 @@ unsigned long sifive_prci_wrpll_recalc_rate(struct __prci_clock *pc,
 	return wrpll_calc_output_rate(&pwd->c, parent_rate);
 }
 
-unsigned long sifive_prci_wrpll_round_rate(struct __prci_clock *pc,
+unsigned long pi_prci_wrpll_round_rate(struct __prci_clock *pc,
 					   unsigned long rate,
 					   unsigned long *parent_rate)
 {
@@ -213,7 +213,7 @@ unsigned long sifive_prci_wrpll_round_rate(struct __prci_clock *pc,
 	return wrpll_calc_output_rate(&c, *parent_rate);
 }
 
-int sifive_prci_wrpll_set_rate(struct __prci_clock *pc,
+int pi_prci_wrpll_set_rate(struct __prci_clock *pc,
 			       unsigned long rate,
 			       unsigned long parent_rate)
 {
@@ -235,7 +235,7 @@ int sifive_prci_wrpll_set_rate(struct __prci_clock *pc,
 	return 0;
 }
 
-int sifive_prci_clock_enable(struct __prci_clock *pc, bool enable)
+int pi_prci_clock_enable(struct __prci_clock *pc, bool enable)
 {
 	struct __prci_wrpll_data *pwd = pc->pwd;
 	struct __prci_data *pd = pc->pd;
@@ -265,7 +265,7 @@ int sifive_prci_clock_enable(struct __prci_clock *pc, bool enable)
 
 /* TLCLKSEL clock integration */
 
-unsigned long sifive_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
 					       unsigned long parent_rate)
 {
 	struct __prci_data *pd = pc->pd;
@@ -281,7 +281,7 @@ unsigned long sifive_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
 
 /* HFPCLK clock integration */
 
-unsigned long sifive_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
+unsigned long pi_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
 						   unsigned long parent_rate)
 {
 	struct __prci_data *pd = pc->pd;
@@ -291,7 +291,7 @@ unsigned long sifive_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
 }
 
 /**
- * sifive_prci_coreclksel_use_final_corepll() - switch the CORECLK mux to output
+ * pi_prci_coreclksel_use_final_corepll() - switch the CORECLK mux to output
  * FINAL_COREPLL
  * @pd: struct __prci_data * for the PRCI containing the CORECLK mux reg
  *
@@ -301,7 +301,7 @@ unsigned long sifive_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_CORECLKSEL_OFFSET register.
  */
-void sifive_prci_coreclksel_use_final_corepll(struct __prci_data *pd)
+void pi_prci_coreclksel_use_final_corepll(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -313,7 +313,7 @@ void sifive_prci_coreclksel_use_final_corepll(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_corepllsel_use_dvfscorepll() - switch the COREPLL mux to
+ * pi_prci_corepllsel_use_dvfscorepll() - switch the COREPLL mux to
  * output DVFS_COREPLL
  * @pd: struct __prci_data * for the PRCI containing the COREPLL mux reg
  *
@@ -322,7 +322,7 @@ void sifive_prci_coreclksel_use_final_corepll(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_COREPLLSEL_OFFSET register.
  */
-void sifive_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd)
+void pi_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -334,7 +334,7 @@ void sifive_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_corepllsel_use_corepll() - switch the COREPLL mux to
+ * pi_prci_corepllsel_use_corepll() - switch the COREPLL mux to
  * output COREPLL
  * @pd: struct __prci_data * for the PRCI containing the COREPLL mux reg
  *
@@ -343,7 +343,7 @@ void sifive_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_COREPLLSEL_OFFSET register.
  */
-void sifive_prci_corepllsel_use_corepll(struct __prci_data *pd)
+void pi_prci_corepllsel_use_corepll(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -355,7 +355,7 @@ void sifive_prci_corepllsel_use_corepll(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_hfpclkpllsel_use_hfclk() - switch the HFPCLKPLL mux to
+ * pi_prci_hfpclkpllsel_use_hfclk() - switch the HFPCLKPLL mux to
  * output HFCLK
  * @pd: struct __prci_data * for the PRCI containing the HFPCLKPLL mux reg
  *
@@ -364,7 +364,7 @@ void sifive_prci_corepllsel_use_corepll(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_HFPCLKPLLSEL_OFFSET register.
  */
-void sifive_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd)
+void pi_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -376,7 +376,7 @@ void sifive_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_hfpclkpllsel_use_hfpclkpll() - switch the HFPCLKPLL mux to
+ * pi_prci_hfpclkpllsel_use_hfpclkpll() - switch the HFPCLKPLL mux to
  * output HFPCLKPLL
  * @pd: struct __prci_data * for the PRCI containing the HFPCLKPLL mux reg
  *
@@ -385,7 +385,7 @@ void sifive_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_HFPCLKPLLSEL_OFFSET register.
  */
-void sifive_prci_hfpclkpllsel_use_hfpclkpll(struct __prci_data *pd)
+void pi_prci_hfpclkpllsel_use_hfpclkpll(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -432,11 +432,11 @@ static int __prci_consumer_reset(const char *rst_name, bool trigger)
 }
 
 /**
- * sifive_prci_ddr_release_reset() - Release DDR reset
+ * pi_prci_ddr_release_reset() - Release DDR reset
  * @pd: struct __prci_data * for the PRCI containing the DDRCLK mux reg
  *
  */
-void sifive_prci_ddr_release_reset(struct __prci_data *pd)
+void pi_prci_ddr_release_reset(struct __prci_data *pd)
 {
 	/* Release DDR ctrl reset */
 	__prci_consumer_reset("ddr_ctrl", true);
@@ -465,11 +465,11 @@ void sifive_prci_ddr_release_reset(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_ethernet_release_reset() - Release ethernet reset
+ * pi_prci_ethernet_release_reset() - Release ethernet reset
  * @pd: struct __prci_data * for the PRCI containing the Ethernet CLK mux reg
  *
  */
-void sifive_prci_ethernet_release_reset(struct __prci_data *pd)
+void pi_prci_ethernet_release_reset(struct __prci_data *pd)
 {
 	/* Release GEMGXL reset */
 	__prci_consumer_reset("gemgxl_reset", true);
@@ -483,11 +483,11 @@ void sifive_prci_ethernet_release_reset(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_cltx_release_reset() - Release cltx reset
+ * pi_prci_cltx_release_reset() - Release cltx reset
  * @pd: struct __prci_data * for the PRCI containing the Ethernet CLK mux reg
  *
  */
-void sifive_prci_cltx_release_reset(struct __prci_data *pd)
+void pi_prci_cltx_release_reset(struct __prci_data *pd)
 {
 	/* Release CLTX reset */
 	__prci_consumer_reset("cltx_reset", true);
@@ -496,7 +496,7 @@ void sifive_prci_cltx_release_reset(struct __prci_data *pd)
 /* Core clock mux control */
 
 /**
- * sifive_prci_coreclksel_use_hfclk() - switch the CORECLK mux to output HFCLK
+ * pi_prci_coreclksel_use_hfclk() - switch the CORECLK mux to output HFCLK
  * @pd: struct __prci_data * for the PRCI containing the CORECLK mux reg
  *
  * Switch the CORECLK mux to the HFCLK input source; return once complete.
@@ -504,7 +504,7 @@ void sifive_prci_cltx_release_reset(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_CORECLKSEL_OFFSET register.
  */
-void sifive_prci_coreclksel_use_hfclk(struct __prci_data *pd)
+void pi_prci_coreclksel_use_hfclk(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -516,7 +516,7 @@ void sifive_prci_coreclksel_use_hfclk(struct __prci_data *pd)
 }
 
 /**
- * sifive_prci_coreclksel_use_corepll() - switch the CORECLK mux to output COREPLL
+ * pi_prci_coreclksel_use_corepll() - switch the CORECLK mux to output COREPLL
  * @pd: struct __prci_data * for the PRCI containing the CORECLK mux reg
  *
  * Switch the CORECLK mux to the PLL output clock; return once complete.
@@ -524,7 +524,7 @@ void sifive_prci_coreclksel_use_hfclk(struct __prci_data *pd)
  * Context: Any context.  Caller must prevent concurrent changes to the
  *          PRCI_CORECLKSEL_OFFSET register.
  */
-void sifive_prci_coreclksel_use_corepll(struct __prci_data *pd)
+void pi_prci_coreclksel_use_corepll(struct __prci_data *pd)
 {
 	u32 r;
 
@@ -566,7 +566,7 @@ static ulong sifive_prci_parent_rate(struct __prci_clock *pc, struct prci_clk_de
 	return parent_rate;
 }
 
-static ulong sifive_prci_get_rate(struct clk *clk)
+static ulong pi_prci_get_rate(struct clk *clk)
 {
 	struct __prci_clock *pc;
 	struct prci_clk_desc *data =
@@ -582,7 +582,7 @@ static ulong sifive_prci_get_rate(struct clk *clk)
 	return pc->ops->recalc_rate(pc, sifive_prci_parent_rate(pc, data));
 }
 
-static ulong sifive_prci_set_rate(struct clk *clk, ulong rate)
+static ulong pi_prci_set_rate(struct clk *clk, ulong rate)
 {
 	int err;
 	struct __prci_clock *pc;
@@ -603,7 +603,7 @@ static ulong sifive_prci_set_rate(struct clk *clk, ulong rate)
 	return rate;
 }
 
-static int sifive_prci_enable(struct clk *clk)
+static int pi_prci_enable(struct clk *clk)
 {
 	struct __prci_clock *pc;
 	int ret = 0;
@@ -623,7 +623,7 @@ static int sifive_prci_enable(struct clk *clk)
 	return ret;
 }
 
-static int sifive_prci_disable(struct clk *clk)
+static int pi_prci_disable(struct clk *clk)
 {
 	struct __prci_clock *pc;
 	int ret = 0;
@@ -686,14 +686,14 @@ static int pi_prci_probe(struct udevice *dev)
 				 */
 				pc = &data->clks[FU740_PRCI_CLK_HFPCLKPLL];
 				parent_rate = sifive_prci_parent_rate(pc, data);
-				sifive_prci_wrpll_set_rate(pc, 260000000,
+				pi_prci_wrpll_set_rate(pc, 260000000,
 							   parent_rate);
 				pc->ops->enable_clk(pc, 1);
 			} else if (prci_pll_reg & PRCI_PRCIPLL_CLTXPLL) {
 				/* CLTX pll init */
 				pc = &data->clks[FU740_PRCI_CLK_CLTXPLL];
 				parent_rate = sifive_prci_parent_rate(pc, data);
-				sifive_prci_wrpll_set_rate(pc, 260000000,
+				pi_prci_wrpll_set_rate(pc, 260000000,
 							   parent_rate);
 				pc->ops->enable_clk(pc, 1);
 			}
@@ -704,10 +704,10 @@ static int pi_prci_probe(struct udevice *dev)
 }
 
 static struct clk_ops pi_prci_ops = {
-	.set_rate = sifive_prci_set_rate,
-	.get_rate = sifive_prci_get_rate,
-	.enable = sifive_prci_enable,
-	.disable = sifive_prci_disable,
+	.set_rate = pi_prci_set_rate,
+	.get_rate = pi_prci_get_rate,
+	.enable = pi_prci_enable,
+	.disable = pi_prci_disable,
 };
 
 static int pi_clk_bind(struct udevice *dev)

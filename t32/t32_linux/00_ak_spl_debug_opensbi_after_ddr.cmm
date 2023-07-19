@@ -125,7 +125,8 @@ Break.Set cpu_probe_all /P	;SPL
 Break.Set pi_prci_probe /P	;SPL
 Break.Set sifive_clint_probe /P	;SPL
 Break.Set pi_reset_request /P	;SPL
-Break.Set sifive_prci_ddr_release_reset /P	;SPL
+;Break.Set sifive_prci_ddr_release_reset /P	;SPL
+Break.Set pi_prci_ddr_release_reset /P	;SPL
 Break.Set __prci_consumer_reset /P	;SPL
 ;Break.Set sifive_gpio_of_to_plat /P	;SPL
 Break.Set pi_gpio_of_to_plat /P	;SPL
