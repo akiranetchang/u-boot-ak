@@ -3,7 +3,7 @@
 
 /dts-v1/;
 
-#include <dt-bindings/clock/sifive-fu740-prci.h>
+#include <dt-bindings/clock/pi-a88-prci.h> /* sifive-fu740-prci.h */
 
 / {
 	#address-cells = <2>;

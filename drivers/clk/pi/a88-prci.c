@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  */
 
-#include <dt-bindings/clock/sifive-fu740-prci.h>
+#include <dt-bindings/clock/pi-a88-prci.h> /* sifive-fu740-prci.h */
 #include "pi-prci.h"
 #include <asm/io.h>
 
