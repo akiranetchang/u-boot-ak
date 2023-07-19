@@ -209,7 +209,7 @@ U_BOOT_DRIVER(serial_pi) = {
 	.ops	= &pi_serial_ops,
 };
 
-#ifdef CONFIG_DEBUG_UART_SIFIVE
+#ifdef CONFIG_DEBUG_UART_PI
 static inline void _debug_uart_init(void)
 {
 	struct uart_pi *regs =
