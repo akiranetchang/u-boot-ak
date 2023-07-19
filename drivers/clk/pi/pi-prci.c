@@ -535,7 +535,7 @@ void pi_prci_coreclksel_use_corepll(struct __prci_data *pd)
 	r = __prci_readl(pd, PRCI_CORECLKSEL_OFFSET); /* barrier */
 }
 
-static ulong sifive_prci_parent_rate(struct __prci_clock *pc, struct prci_clk_desc *data)
+static ulong pi_prci_parent_rate(struct __prci_clock *pc, struct prci_clk_desc *data)
 {
 	ulong parent_rate;
 	ulong i;
@@ -555,7 +555,7 @@ static ulong sifive_prci_parent_rate(struct __prci_clock *pc, struct prci_clk_de
 		if (!p->pd || !p->ops->recalc_rate)
 			return -ENXIO;
 
-		return p->ops->recalc_rate(p, sifive_prci_parent_rate(p, data));
+		return p->ops->recalc_rate(p, pi_prci_parent_rate(p, data));
 	}
 
 	if (strcmp(pc->parent_name, "rtcclk") == 0)
@@ -579,7 +579,7 @@ static ulong pi_prci_get_rate(struct clk *clk)
 	if (!pc->pd || !pc->ops->recalc_rate)
 		return -ENXIO;
 
-	return pc->ops->recalc_rate(pc, sifive_prci_parent_rate(pc, data));
+	return pc->ops->recalc_rate(pc, pi_prci_parent_rate(pc, data));
 }
 
 static ulong pi_prci_set_rate(struct clk *clk, ulong rate)
@@ -596,7 +596,7 @@ static ulong pi_prci_set_rate(struct clk *clk, ulong rate)
 	if (!pc->pd || !pc->ops->set_rate)
 		return -ENXIO;
 
-	err = pc->ops->set_rate(pc, rate, sifive_prci_parent_rate(pc, data));
+	err = pc->ops->set_rate(pc, rate, pi_prci_parent_rate(pc, data));
 	if (err)
 		return err;
 
@@ -685,14 +685,14 @@ static int pi_prci_probe(struct udevice *dev)
 				 * Chiplink
 				 */
 				pc = &data->clks[FU740_PRCI_CLK_HFPCLKPLL];
-				parent_rate = sifive_prci_parent_rate(pc, data);
+				parent_rate = pi_prci_parent_rate(pc, data);
 				pi_prci_wrpll_set_rate(pc, 260000000,
 							   parent_rate);
 				pc->ops->enable_clk(pc, 1);
 			} else if (prci_pll_reg & PRCI_PRCIPLL_CLTXPLL) {
 				/* CLTX pll init */
 				pc = &data->clks[FU740_PRCI_CLK_CLTXPLL];
-				parent_rate = sifive_prci_parent_rate(pc, data);
+				parent_rate = pi_prci_parent_rate(pc, data);
 				pi_prci_wrpll_set_rate(pc, 260000000,
 							   parent_rate);
 				pc->ops->enable_clk(pc, 1);
