@@ -88,6 +88,13 @@ Break.Set dm_init_and_scan /P	;SPL
 Break.Set dm_init /P	;SPL
 ;Break.Set dm_scan /P	;SPL
 
+Break.Set spl_board_init_f /P	;SPL
+Break.Set spl_soc_init /P	;SPL
+Break.Set board_fdt_blob_setup /P	;SPL
+Break.Set board_init /P	;SPL
+Break.Set enable_caches /P	;SPL
+
+
 ;
 ;;
 ;

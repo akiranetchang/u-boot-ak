@@ -90,6 +90,7 @@ int spl_board_init_f(void)
 		goto end;
 	}
 
+#ifdef SIFIVE_PI
 	ret = spl_gemgxl_init();
 	if (ret) {
 		debug("Gigabit ethernet PHY (VSC8541) init failed: %d\n", ret);
@@ -113,6 +114,7 @@ int spl_board_init_f(void)
 		debug("USB 2.0 PHY (USB3320C) init failed: %d\n", ret);
 		goto end;
 	}
+#endif // SIFIVE_PI
 
 end:
 	return ret;
