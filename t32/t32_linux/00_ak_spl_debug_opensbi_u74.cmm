@@ -15,11 +15,9 @@ local &linux_path
 
 &opensbi_path="&cur_dir/../../cache/sources/opensbi/v1.2-pi/build/platform/generic/firmware"
 
-;&uboot_spl_path="&cur_dir/../../cache/sources/u-boot-worktree/u-boot/v2022.10-pi/spl"
-&uboot_spl_path="&cur_dir/../../cache/sources/u-boot-worktree/u-boot/v2022.10-pi.u74/spl"
+&uboot_spl_path="&cur_dir/../../u74-build/spl"
 
-;&uboot_path="&cur_dir/../../cache/sources/u-boot-worktree/u-boot/v2022.10-pi"
-&uboot_path="&cur_dir/../../cache/sources/u-boot-worktree/u-boot/v2022.10-pi.u74"
+&uboot_path="&cur_dir/../../u74-build/"
 
 ;
 &ak_spl_path="&cur_dir/../ak_image/build/spl"
