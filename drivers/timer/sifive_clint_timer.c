@@ -12,12 +12,15 @@
 #include <dm/device-internal.h>
 #include <linux/err.h>
 
+
+#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
+
 /* mtime register */
 #define MTIME_REG(base)			((ulong)(base) + 0xbff8)
 
 static u64 notrace sifive_clint_get_count(struct udevice *dev)
 {
-	return readq((void __iomem *)MTIME_REG(dev_get_priv(dev)));
+D	return readq((void __iomem *)MTIME_REG(dev_get_priv(dev)));
 }
 
 #if CONFIG_IS_ENABLED(RISCV_MMODE) && IS_ENABLED(CONFIG_TIMER_EARLY)
@@ -26,7 +29,7 @@ static u64 notrace sifive_clint_get_count(struct udevice *dev)
  */
 unsigned long notrace timer_early_get_rate(void)
 {
-	return RISCV_MMODE_TIMER_FREQ;
+D	return RISCV_MMODE_TIMER_FREQ;
 }
 
 /**
@@ -35,7 +38,7 @@ unsigned long notrace timer_early_get_rate(void)
  */
 u64 notrace timer_early_get_count(void)
 {
-	return readq((void __iomem *)MTIME_REG(RISCV_MMODE_TIMERBASE));
+D	return readq((void __iomem *)MTIME_REG(RISCV_MMODE_TIMERBASE));
 }
 #endif
 
@@ -45,7 +48,7 @@ static const struct timer_ops sifive_clint_ops = {
 
 static int sifive_clint_probe(struct udevice *dev)
 {
-	dev_set_priv(dev, dev_read_addr_ptr(dev));
+D	dev_set_priv(dev, dev_read_addr_ptr(dev));
 	if (!dev_get_priv(dev))
 		return -EINVAL;
 
