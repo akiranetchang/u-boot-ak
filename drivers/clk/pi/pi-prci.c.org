@@ -34,8 +34,6 @@
 #include <linux/math64.h>
 #include <dt-bindings/clock/pi-a88-prci.h>
 
-#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 #include "a88-prci.h"
 
 /*
@@ -57,12 +55,12 @@
  */
 static u32 __prci_readl(struct __prci_data *pd, u32 offs)
 {
-D	return readl(pd->va + offs);
+	return readl(pd->va + offs);
 }
 
 static void __prci_writel(u32 v, u32 offs, struct __prci_data *pd)
 {
-D	writel(v, pd->va + offs);
+	writel(v, pd->va + offs);
 }
 
 /* WRPLL-related private functions */
@@ -83,7 +81,7 @@ D	writel(v, pd->va + offs);
  */
 static void __prci_wrpll_unpack(struct wrpll_cfg *c, u32 r)
 {
-D	u32 v;
+	u32 v;
 
 	v = r & PRCI_COREPLLCFG0_DIVR_MASK;
 	v >>= PRCI_COREPLLCFG0_DIVR_SHIFT;
@@ -125,7 +123,7 @@ D	u32 v;
  */
 static u32 __prci_wrpll_pack(const struct wrpll_cfg *c)
 {
-D	u32 r = 0;
+	u32 r = 0;
 
 	r |= c->divr << PRCI_COREPLLCFG0_DIVR_SHIFT;
 	r |= c->divf << PRCI_COREPLLCFG0_DIVF_SHIFT;
@@ -153,7 +151,7 @@ D	u32 r = 0;
 static void __prci_wrpll_read_cfg0(struct __prci_data *pd,
 				   struct __prci_wrpll_data *pwd)
 {
-D	__prci_wrpll_unpack(&pwd->c, __prci_readl(pd, pwd->cfg0_offs));
+	__prci_wrpll_unpack(&pwd->c, __prci_readl(pd, pwd->cfg0_offs));
 }
 
 /**
@@ -174,7 +172,7 @@ static void __prci_wrpll_write_cfg0(struct __prci_data *pd,
 				    struct __prci_wrpll_data *pwd,
 				    struct wrpll_cfg *c)
 {
-D	__prci_writel(__prci_wrpll_pack(c), pwd->cfg0_offs, pd);
+	__prci_writel(__prci_wrpll_pack(c), pwd->cfg0_offs, pd);
 
 	memcpy(&pwd->c, c, sizeof(*c));
 }
@@ -190,13 +188,13 @@ static void __prci_wrpll_write_cfg1(struct __prci_data *pd,
 				    struct __prci_wrpll_data *pwd,
 				    u32 enable)
 {
-D	__prci_writel(enable, pwd->cfg1_offs, pd);
+	__prci_writel(enable, pwd->cfg1_offs, pd);
 }
 
 unsigned long pi_prci_wrpll_recalc_rate(struct __prci_clock *pc,
 					    unsigned long parent_rate)
 {
-D	struct __prci_wrpll_data *pwd = pc->pwd;
+	struct __prci_wrpll_data *pwd = pc->pwd;
 
 	return wrpll_calc_output_rate(&pwd->c, parent_rate);
 }
@@ -205,7 +203,7 @@ unsigned long pi_prci_wrpll_round_rate(struct __prci_clock *pc,
 					   unsigned long rate,
 					   unsigned long *parent_rate)
 {
-D	struct __prci_wrpll_data *pwd = pc->pwd;
+	struct __prci_wrpll_data *pwd = pc->pwd;
 	struct wrpll_cfg c;
 
 	memcpy(&c, &pwd->c, sizeof(c));
@@ -219,7 +217,7 @@ int pi_prci_wrpll_set_rate(struct __prci_clock *pc,
 			       unsigned long rate,
 			       unsigned long parent_rate)
 {
-D	struct __prci_wrpll_data *pwd = pc->pwd;
+	struct __prci_wrpll_data *pwd = pc->pwd;
 	struct __prci_data *pd = pc->pd;
 	int r;
 
@@ -239,7 +237,7 @@ D	struct __prci_wrpll_data *pwd = pc->pwd;
 
 int pi_prci_clock_enable(struct __prci_clock *pc, bool enable)
 {
-D	struct __prci_wrpll_data *pwd = pc->pwd;
+	struct __prci_wrpll_data *pwd = pc->pwd;
 	struct __prci_data *pd = pc->pd;
 
 	if (enable) {
@@ -270,7 +268,7 @@ D	struct __prci_wrpll_data *pwd = pc->pwd;
 unsigned long pi_prci_tlclksel_recalc_rate(struct __prci_clock *pc,
 					       unsigned long parent_rate)
 {
-D	struct __prci_data *pd = pc->pd;
+	struct __prci_data *pd = pc->pd;
 	u32 v;
 	u8 div;
 
@@ -286,7 +284,7 @@ D	struct __prci_data *pd = pc->pd;
 unsigned long pi_prci_hfpclkplldiv_recalc_rate(struct __prci_clock *pc,
 						   unsigned long parent_rate)
 {
-D	struct __prci_data *pd = pc->pd;
+	struct __prci_data *pd = pc->pd;
 	u32 div = __prci_readl(pd, PRCI_HFPCLKPLLDIV_OFFSET);
 
 	return div_u64(parent_rate, div + 2);
@@ -305,7 +303,7 @@ D	struct __prci_data *pd = pc->pd;
  */
 void pi_prci_coreclksel_use_final_corepll(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_CORECLKSEL_OFFSET);
 	r &= ~PRCI_CORECLKSEL_CORECLKSEL_MASK;
@@ -326,7 +324,7 @@ D	u32 r;
  */
 void pi_prci_corepllsel_use_dvfscorepll(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_COREPLLSEL_OFFSET);
 	r |= PRCI_COREPLLSEL_COREPLLSEL_MASK;
@@ -347,7 +345,7 @@ D	u32 r;
  */
 void pi_prci_corepllsel_use_corepll(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_COREPLLSEL_OFFSET);
 	r &= ~PRCI_COREPLLSEL_COREPLLSEL_MASK;
@@ -368,7 +366,7 @@ D	u32 r;
  */
 void pi_prci_hfpclkpllsel_use_hfclk(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_HFPCLKPLLSEL_OFFSET);
 	r |= PRCI_HFPCLKPLLSEL_HFPCLKPLLSEL_MASK;
@@ -389,7 +387,7 @@ D	u32 r;
  */
 void pi_prci_hfpclkpllsel_use_hfpclkpll(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_HFPCLKPLLSEL_OFFSET);
 	r &= ~PRCI_HFPCLKPLLSEL_HFPCLKPLLSEL_MASK;
@@ -400,7 +398,7 @@ D	u32 r;
 
 static int __prci_consumer_reset(const char *rst_name, bool trigger)
 {
-D	struct udevice *dev;
+	struct udevice *dev;
 	struct reset_ctl rst_sig;
 	int ret;
 
@@ -440,7 +438,7 @@ D	struct udevice *dev;
  */
 void pi_prci_ddr_release_reset(struct __prci_data *pd)
 {
-D	/* Release DDR ctrl reset */
+	/* Release DDR ctrl reset */
 	__prci_consumer_reset("ddr_ctrl", true);
 
 	/* HACK to get the '1 full controller clock cycle'. */
@@ -473,7 +471,7 @@ D	/* Release DDR ctrl reset */
  */
 void pi_prci_ethernet_release_reset(struct __prci_data *pd)
 {
-D	/* Release GEMGXL reset */
+	/* Release GEMGXL reset */
 	__prci_consumer_reset("gemgxl_reset", true);
 
 	/* Procmon => core clock */
@@ -492,7 +490,7 @@ D	/* Release GEMGXL reset */
 void pi_prci_cltx_release_reset(struct __prci_data *pd)
 {
 	/* Release CLTX reset */
-D	__prci_consumer_reset("cltx_reset", true);
+	__prci_consumer_reset("cltx_reset", true);
 }
 
 /* Core clock mux control */
@@ -508,7 +506,7 @@ D	__prci_consumer_reset("cltx_reset", true);
  */
 void pi_prci_coreclksel_use_hfclk(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_CORECLKSEL_OFFSET);
 	r |= PRCI_CORECLKSEL_CORECLKSEL_MASK;
@@ -528,7 +526,7 @@ D	u32 r;
  */
 void pi_prci_coreclksel_use_corepll(struct __prci_data *pd)
 {
-D	u32 r;
+	u32 r;
 
 	r = __prci_readl(pd, PRCI_CORECLKSEL_OFFSET);
 	r &= ~PRCI_CORECLKSEL_CORECLKSEL_MASK;
@@ -539,7 +537,7 @@ D	u32 r;
 
 static ulong pi_prci_parent_rate(struct __prci_clock *pc, struct prci_clk_desc *data)
 {
-D	ulong parent_rate;
+	ulong parent_rate;
 	ulong i;
 	struct __prci_clock *p;
 
@@ -570,7 +568,7 @@ D	ulong parent_rate;
 
 static ulong pi_prci_get_rate(struct clk *clk)
 {
-D	struct __prci_clock *pc;
+	struct __prci_clock *pc;
 	struct prci_clk_desc *data =
 		(struct prci_clk_desc *)dev_get_driver_data(clk->dev);
 
@@ -586,7 +584,7 @@ D	struct __prci_clock *pc;
 
 static ulong pi_prci_set_rate(struct clk *clk, ulong rate)
 {
-D	int err;
+	int err;
 	struct __prci_clock *pc;
 	struct prci_clk_desc *data =
 		(struct prci_clk_desc *)dev_get_driver_data(clk->dev);
@@ -607,7 +605,7 @@ D	int err;
 
 static int pi_prci_enable(struct clk *clk)
 {
-D	struct __prci_clock *pc;
+	struct __prci_clock *pc;
 	int ret = 0;
 	struct prci_clk_desc *data =
 		(struct prci_clk_desc *)dev_get_driver_data(clk->dev);
@@ -627,7 +625,7 @@ D	struct __prci_clock *pc;
 
 static int pi_prci_disable(struct clk *clk)
 {
-D	struct __prci_clock *pc;
+	struct __prci_clock *pc;
 	int ret = 0;
 	struct prci_clk_desc *data =
 		(struct prci_clk_desc *)dev_get_driver_data(clk->dev);
@@ -647,7 +645,7 @@ D	struct __prci_clock *pc;
 
 static int pi_prci_probe(struct udevice *dev)
 {
-D	int i, err;
+	int i, err;
 	struct __prci_clock *pc;
 	struct __prci_data *pd = dev_get_priv(dev);
 
@@ -714,7 +712,7 @@ static struct clk_ops pi_prci_ops = {
 
 static int pi_clk_bind(struct udevice *dev)
 {
-D	return pi_reset_bind(dev, PRCI_DEVICERESETCNT);
+	return pi_reset_bind(dev, PRCI_DEVICERESETCNT);
 }
 
 static const struct udevice_id pi_prci_ids[] = {

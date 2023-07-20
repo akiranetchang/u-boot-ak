@@ -41,7 +41,9 @@ SYSTEM.up
 ;Break.Set 0x08000096 /P /Onchip		;SPL asm dcache_enable
 ;Break.Set 0x080001DE /P /Onchip		;SPL arch_cpu_init_dm
 ;Break.Set 0x080004D8 /P /Onchip		;SPL board_init_f
-Break.Set 0x080007EC /P /Onchip		;SPL board_init_f u74
+;Break.Set 0x080007EC /P /Onchip		;SPL board_init_f u74
+Break.Set 0x08000856 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x080008A2 /P /Onchip		;SPL board_init_f log
 ;Break.Set 0x080009A4 /P /Onchip		;SPL spl_early_init
 ;Break.Set 0x0800087E /P /Onchip		;SPL spl_common_init
 ;Break.Set 0x080065B2 /P /Onchip		;SPL dm_init_and_scan
@@ -67,7 +69,9 @@ WAIT !STATE.RUN()
 ;Break.Delete 0x08000000        ;delete breakpoint
 ;Break.Delete 0x080001DE        ;delete breakpoint
 ;Break.Delete 0x080004D8 	;delete breakpoint
-Break.Delete 0x080007EC 	;delete breakpoint
+;Break.Delete 0x080007EC 	;delete breakpoint
+Break.Delete 0x08000856 	;delete breakpoint
+;Break.Delete 0x080008A2 	;delete breakpoint
 ;Break.Delete 0x0800031E        ;delete breakpoint
 ;Break.Delete 0x0800077C        ;delete breakpoint
 ;Break.Delete spl_board_init_f+0x18       ;delete breakpoint
@@ -87,6 +91,13 @@ Break.Set fdtdec_setup /P	;SPL
 Break.Set dm_init_and_scan /P	;SPL
 Break.Set dm_init /P	;SPL
 ;Break.Set dm_scan /P	;SPL
+
+Break.Set spl_board_init_f /P	;SPL
+Break.Set spl_soc_init /P	;SPL
+;Break.Set board_fdt_blob_setup /P	;SPL
+;Break.Set board_init /P	;SPL
+;Break.Set enable_caches /P	;SPL
+
 
 ;
 ;;
@@ -142,13 +153,20 @@ Break.Set pi_ddr_probe /P	;SPL
 ;Break.Set sifive_reset_probe /P	;SPL
 Break.Set pi_reset_probe /P	;SPL
 ;Break.Set sifive_gpio_probe /P	;SPL
+
 Break.Set pi_gpio_probe /P	;SPL
+Break.Set pi_gpio_get_function /P	;SPL
+Break.Set pi_gpio_direction_input /P	;SPL
+Break.Set pi_gpio_direction_output /P	;SPL
+Break.Set pi_gpio_get_value /P	;SPL
+Break.Set pi_gpio_set_value /P	;SPL
+Break.Set pi_gpio_of_to_plat /P	;SPL
 
 
 Break.Set board_init_r /P	;SPL
 Break.Set timer_init /P	;SPL
 
-Break.Set dm_gpio_request /P	;SPL
+;Break.Set dm_gpio_request /P	;SPL
 Break.Set 0x0800734C /P	;SPL ops->request
 
 Break.Set riscv_cpu_setup /P	;SPL

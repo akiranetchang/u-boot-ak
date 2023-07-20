@@ -18,9 +18,6 @@
 #include <wait_bit.h>
 #include <linux/bitops.h>
 
-
-#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 #define DENALI_CTL_0	0
 #define DENALI_CTL_21	21
 #define DENALI_CTL_120	120
@@ -114,7 +111,7 @@ static void sdram_copy_to_reg(volatile u32 *dest,
 {
 	int i;
 
-D	for (i = 0; i < n / sizeof(u32); i++) {
+	for (i = 0; i < n / sizeof(u32); i++) {
 		writel(*src, dest);
 		src++;
 		dest++;
@@ -125,7 +122,7 @@ static void pi_ddr_setup_range_protection(volatile u32 *ctl, u64 end_addr)
 {
 	u32 end_addr_16kblocks = ((end_addr >> 14) & 0x7FFFFF) - 1;
 
-D	writel(0x0, DENALI_CTL_209 + ctl);
+	writel(0x0, DENALI_CTL_209 + ctl);
 	writel(end_addr_16kblocks, DENALI_CTL_210 + ctl);
 	writel(0x0, DENALI_CTL_212 + ctl);
 	writel(0x0, DENALI_CTL_214 + ctl);
@@ -141,7 +138,7 @@ D	writel(0x0, DENALI_CTL_209 + ctl);
 static void pi_ddr_start(volatile u32 *ctl, u32 *physical_filter_ctrl,
 			     u64 ddr_end)
 {
-D	volatile u64 *filterreg = (volatile u64 *)physical_filter_ctrl;
+	volatile u64 *filterreg = (volatile u64 *)physical_filter_ctrl;
 
 	setbits_le32(DENALI_CTL_0 + ctl, 0x1);
 
@@ -160,7 +157,7 @@ static void pi_ddr_check_errata(u32 regbase, u32 updownreg)
 	u8 failc0, failc1;
 	u32 phy_rx_cal_dqn_0_offset;
 
-D	for (u32 bit = 0; bit < 2; bit++) {
+	for (u32 bit = 0; bit < 2; bit++) {
 		if (bit == 0) {
 			phy_rx_cal_dqn_0_offset =
 				PHY_RX_CAL_DQ0_0_OFFSET;
@@ -210,7 +207,7 @@ static u64 pi_ddr_phy_fixup(volatile u32 *ddrphyreg)
 	u32 slicebase = 0;
 
 	/* check errata condition */
-D	for (u32 slice = 0; slice < 8; slice++) {
+	for (u32 slice = 0; slice < 8; slice++) {
 		u32 regbase = slicebase + 34;
 
 		for (u32 reg = 0; reg < 4; reg++) {
@@ -228,12 +225,12 @@ static u32 pi_ddr_get_dram_class(volatile u32 *ctl)
 {
 	u32 reg = readl(DENALI_CTL_0 + ctl);
 
-D	return ((reg >> DRAM_CLASS_OFFSET) & 0xF);
+	return ((reg >> DRAM_CLASS_OFFSET) & 0xF);
 }
 
 static int pi_ddr_setup(struct udevice *dev)
 {
-D	struct pi_ddr_info *priv = dev_get_priv(dev);
+	struct pi_ddr_info *priv = dev_get_priv(dev);
 	struct pi_dmc_plat *plat = dev_get_plat(dev);
 	struct pi_ddr_params *params = &plat->ddr_params;
 	volatile u32 *denali_ctl =  priv->ctl->denali_ctl;
@@ -337,7 +334,7 @@ static int pi_ddr_probe(struct udevice *dev)
 	struct pi_ddr_info *priv = dev_get_priv(dev);
 
 	/* Read memory base and size from DT */
-D	fdtdec_setup_mem_size_base();
+	fdtdec_setup_mem_size_base();
 	priv->info.base = gd->ram_base;
 	priv->info.size = gd->ram_size;
 
@@ -345,7 +342,7 @@ D	fdtdec_setup_mem_size_base();
 	int ret;
 	u32 clock = 0;
 
-D	debug("pi DDR probe\n");
+	debug("pi DDR probe\n");
 	priv->dev = dev;
 
 	ret = clk_get_by_index(dev, 0, &priv->ddr_clk);
@@ -386,7 +383,7 @@ static int pi_ddr_get_info(struct udevice *dev, struct ram_info *info)
 {
 	struct pi_ddr_info *priv = dev_get_priv(dev);
 
-D	*info = priv->info;
+	*info = priv->info;
 
 	return 0;
 }

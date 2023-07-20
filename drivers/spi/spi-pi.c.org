@@ -18,8 +18,6 @@
 #include <linux/log2.h>
 #include <clk.h>
 
-#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 #define SIFIVE_SPI_MAX_CS		32
 
 #define SIFIVE_SPI_DEFAULT_DEPTH	8
@@ -109,7 +107,7 @@ struct pi_spi {
 static void pi_spi_prep_device(struct pi_spi *spi,
 				   struct dm_spi_slave_plat *slave_plat)
 {
-D	/* Update the chip select polarity */
+	/* Update the chip select polarity */
 	if (slave_plat->mode & SPI_CS_HIGH)
 		spi->cs_inactive &= ~BIT(slave_plat->cs);
 	else
@@ -123,7 +121,7 @@ D	/* Update the chip select polarity */
 static int pi_spi_set_cs(struct pi_spi *spi,
 			     struct dm_spi_slave_plat *slave_plat)
 {
-D	u32 cs_mode = SIFIVE_SPI_CSMODE_MODE_HOLD;
+	u32 cs_mode = SIFIVE_SPI_CSMODE_MODE_HOLD;
 
 	if (slave_plat->mode & SPI_CS_HIGH)
 		cs_mode = SIFIVE_SPI_CSMODE_MODE_AUTO;
@@ -135,14 +133,14 @@ D	u32 cs_mode = SIFIVE_SPI_CSMODE_MODE_HOLD;
 
 static void pi_spi_clear_cs(struct pi_spi *spi)
 {
-D	writel(SIFIVE_SPI_CSMODE_MODE_AUTO, spi->regs + SIFIVE_SPI_REG_CSMODE);
+	writel(SIFIVE_SPI_CSMODE_MODE_AUTO, spi->regs + SIFIVE_SPI_REG_CSMODE);
 }
 
 static void pi_spi_prep_transfer(struct pi_spi *spi,
 				     struct dm_spi_slave_plat *slave_plat,
 				     u8 *rx_ptr)
 {
-D	u32 cr;
+	u32 cr;
 
 	/* Modify the SPI protocol mode */
 	cr = readl(spi->regs + SIFIVE_SPI_REG_FMT);
@@ -180,7 +178,7 @@ D	u32 cr;
 
 static void pi_spi_rx(struct pi_spi *spi, u8 *rx_ptr)
 {
-D	u32 data;
+	u32 data;
 
 	do {
 		data = readl(spi->regs + SIFIVE_SPI_REG_RXDATA);
@@ -192,7 +190,7 @@ D	u32 data;
 
 static void pi_spi_tx(struct pi_spi *spi, const u8 *tx_ptr)
 {
-D	u32 data;
+	u32 data;
 	u8 tx_data = (tx_ptr) ? *tx_ptr & SIFIVE_SPI_TXDATA_DATA_MASK :
 				SIFIVE_SPI_TXDATA_DATA_MASK;
 
@@ -205,14 +203,14 @@ D	u32 data;
 
 static int pi_spi_wait(struct pi_spi *spi, u32 bit)
 {
-D	return wait_for_bit_le32(spi->regs + SIFIVE_SPI_REG_IP,
+	return wait_for_bit_le32(spi->regs + SIFIVE_SPI_REG_IP,
 				 bit, true, 100, false);
 }
 
 static int pi_spi_xfer(struct udevice *dev, unsigned int bitlen,
 			   const void *dout, void *din, unsigned long flags)
 {
-D	struct udevice *bus = dev->parent;
+	struct udevice *bus = dev->parent;
 	struct pi_spi *spi = dev_get_priv(bus);
 	struct dm_spi_slave_plat *slave_plat = dev_get_parent_plat(dev);
 	const u8 *tx_ptr = dout;
@@ -273,7 +271,7 @@ D	struct udevice *bus = dev->parent;
 static int pi_spi_exec_op(struct spi_slave *slave,
 			      const struct spi_mem_op *op)
 {
-D	struct udevice *dev = slave->dev;
+	struct udevice *dev = slave->dev;
 	struct pi_spi *spi = dev_get_priv(dev->parent);
 	unsigned long flags = SPI_XFER_BEGIN;
 	u8 opcode = op->cmd.opcode;
@@ -346,7 +344,7 @@ D	struct udevice *dev = slave->dev;
 
 static int pi_spi_set_speed(struct udevice *bus, uint speed)
 {
-D	struct pi_spi *spi = dev_get_priv(bus);
+	struct pi_spi *spi = dev_get_priv(bus);
 	u32 scale;
 
 	if (speed > spi->freq)
@@ -362,7 +360,7 @@ D	struct pi_spi *spi = dev_get_priv(bus);
 
 static int pi_spi_set_mode(struct udevice *bus, uint mode)
 {
-D	struct pi_spi *spi = dev_get_priv(bus);
+	struct pi_spi *spi = dev_get_priv(bus);
 	u32 cr;
 
 	/* Switch clock mode bits */
@@ -381,7 +379,7 @@ D	struct pi_spi *spi = dev_get_priv(bus);
 static int pi_spi_cs_info(struct udevice *bus, uint cs,
 			      struct spi_cs_info *info)
 {
-D	struct pi_spi *spi = dev_get_priv(bus);
+	struct pi_spi *spi = dev_get_priv(bus);
 
 	if (cs >= spi->num_cs)
 		return -EINVAL;
@@ -391,7 +389,7 @@ D	struct pi_spi *spi = dev_get_priv(bus);
 
 static void pi_spi_init_hw(struct pi_spi *spi)
 {
-D	u32 cs_bits;
+	u32 cs_bits;
 
 	/* probe the number of CS lines */
 	spi->cs_inactive = readl(spi->regs + SIFIVE_SPI_REG_CSDEF);
@@ -428,7 +426,7 @@ D	u32 cs_bits;
 
 static int pi_spi_probe(struct udevice *bus)
 {
-D	struct pi_spi *spi = dev_get_priv(bus);
+	struct pi_spi *spi = dev_get_priv(bus);
 	struct clk clkdev;
 	int ret;
 

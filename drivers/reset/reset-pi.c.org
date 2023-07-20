@@ -13,8 +13,6 @@
 #include <dm/lists.h>
 #include <linux/bitops.h>
 
-#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 #define PRCI_RESETREG_OFFSET 0x28
 
 struct pi_reset_priv {
@@ -25,7 +23,7 @@ struct pi_reset_priv {
 
 static int pi_rst_trigger(struct reset_ctl *rst, bool level)
 {
-D	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
+	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
 	int id = rst->id;
 	int regval = readl(priv->base + PRCI_RESETREG_OFFSET);
 
@@ -44,17 +42,17 @@ D	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
 
 static int pi_reset_assert(struct reset_ctl *rst)
 {
-D	return pi_rst_trigger(rst, false);
+	return pi_rst_trigger(rst, false);
 }
 
 static int pi_reset_deassert(struct reset_ctl *rst)
 {
-D	return pi_rst_trigger(rst, true);
+	return pi_rst_trigger(rst, true);
 }
 
 static int pi_reset_request(struct reset_ctl *rst)
 {
-D	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
+	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
 
 	debug("%s(rst=%p) (dev=%p, id=%lu) (nr_reset=%d)\n", __func__,
 	      rst, rst->dev, rst->id, priv->nr_reset);
@@ -67,7 +65,7 @@ D	struct pi_reset_priv *priv = dev_get_priv(rst->dev);
 
 static int pi_reset_probe(struct udevice *dev)
 {
-D	struct pi_reset_priv *priv = dev_get_priv(dev);
+	struct pi_reset_priv *priv = dev_get_priv(dev);
 
 	priv->base = dev_remap_addr(dev);
 	if (!priv->base)
@@ -78,7 +76,7 @@ D	struct pi_reset_priv *priv = dev_get_priv(dev);
 
 int pi_reset_bind(struct udevice *dev, ulong count)
 {
-D	struct udevice *rst_dev;
+	struct udevice *rst_dev;
 	struct pi_reset_priv *priv;
 	int ret;
 

@@ -13,11 +13,9 @@
 #include <asm/gpio.h>
 #include <linux/bitops.h>
 
-#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 static int pi_gpio_probe(struct udevice *dev)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 	char name[18], *str;
 
@@ -38,7 +36,7 @@ D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 
 static void pi_update_gpio_reg(void *bptr, u32 offset, bool value)
 {
-D	void __iomem *ptr = (void __iomem *)bptr;
+	void __iomem *ptr = (void __iomem *)bptr;
 
 	u32 bit = BIT(offset);
 	u32 old = readl(ptr);
@@ -51,7 +49,7 @@ D	void __iomem *ptr = (void __iomem *)bptr;
 
 static int pi_gpio_direction_input(struct udevice *dev, u32 offset)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 
 	if (offset > uc_priv->gpio_count)
@@ -67,7 +65,7 @@ D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 static int pi_gpio_direction_output(struct udevice *dev, u32 offset,
 					int value)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 
 	if (offset > uc_priv->gpio_count)
@@ -85,7 +83,7 @@ D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 
 static int pi_gpio_get_value(struct udevice *dev, u32 offset)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 	int val;
 	int dir;
@@ -106,7 +104,7 @@ D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 
 static int pi_gpio_set_value(struct udevice *dev, u32 offset, int value)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 
 	if (offset > uc_priv->gpio_count)
@@ -119,7 +117,7 @@ D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 
 static int pi_gpio_get_function(struct udevice *dev, unsigned int offset)
 {
-D	struct sifive_gpio_plat *plat = dev_get_plat(dev);
+	struct sifive_gpio_plat *plat = dev_get_plat(dev);
 	u32	outdir, indir, val;
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
 
