@@ -42,7 +42,10 @@ SYSTEM.up
 ;Break.Set 0x080001DE /P /Onchip		;SPL arch_cpu_init_dm
 ;Break.Set 0x080004D8 /P /Onchip		;SPL board_init_f
 ;Break.Set 0x080007EC /P /Onchip		;SPL board_init_f u74
-Break.Set 0x08000856 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x08000856 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x0800085A /P /Onchip		;SPL board_init_f log
+Break.Set 0x080007F0 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x080019DE /P /Onchip		;SPL board_init_f_alloc_reserve log
 ;Break.Set 0x080008A2 /P /Onchip		;SPL board_init_f log
 ;Break.Set 0x080009A4 /P /Onchip		;SPL spl_early_init
 ;Break.Set 0x0800087E /P /Onchip		;SPL spl_common_init
@@ -70,7 +73,8 @@ WAIT !STATE.RUN()
 ;Break.Delete 0x080001DE        ;delete breakpoint
 ;Break.Delete 0x080004D8 	;delete breakpoint
 ;Break.Delete 0x080007EC 	;delete breakpoint
-Break.Delete 0x08000856 	;delete breakpoint
+;Break.Delete 0x08000856 	;delete breakpoint
+Break.Delete 0x0800085A 	;delete breakpoint
 ;Break.Delete 0x080008A2 	;delete breakpoint
 ;Break.Delete 0x0800031E        ;delete breakpoint
 ;Break.Delete 0x0800077C        ;delete breakpoint
@@ -80,6 +84,11 @@ Break.Delete 0x08000856 	;delete breakpoint
 
 ;Break.Set 0x080008C2 /P /Onchip	;SPL spl_boot_device
 ;Break.Set spl_boot_device /P /Onchip	;SPL spl_boot_device
+
+;arch/riscv/cpu/start.S
+;common/init/board_init.c
+Break.Set board_init_f_alloc_reserve /P	;SPL
+Break.Set harts_early_init /P	;SPL
 
 Break.Set board_init_f /P	;SPL
 Break.Set spl_early_init /P	;SPL
