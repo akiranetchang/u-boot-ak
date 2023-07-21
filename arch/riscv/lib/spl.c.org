@@ -15,8 +15,6 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-#define D       printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
-
 __weak int spl_board_init_f(void)
 {
 	return 0;
@@ -26,15 +24,15 @@ __weak void board_init_f(ulong dummy)
 {
 	int ret;
 
-D	ret = spl_early_init();
+	ret = spl_early_init();
 	if (ret)
 		panic("spl_early_init() failed: %d\n", ret);
 
-D	riscv_cpu_setup(NULL, NULL);
+	riscv_cpu_setup(NULL, NULL);
 
-D	preloader_console_init();
+	preloader_console_init();
 
-D	ret = spl_board_init_f();
+	ret = spl_board_init_f();
 	if (ret)
 		panic("spl_board_init_f() failed: %d\n", ret);
 }
