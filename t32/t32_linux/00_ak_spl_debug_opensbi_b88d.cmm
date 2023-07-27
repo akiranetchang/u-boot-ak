@@ -36,6 +36,10 @@ SYSTEM.JtagClock 20.0MHz
 system.memaccess StopAndGo
 SYSTEM.up
 
+Data.Set MD:0x10000050 %LE %Long 0x82063BC2
+Data.Set MD:0x10000054 %LE %Long 0x80000000
+Data.Set MD:0x10000058 %LE %Long 0x00000000
+
 ;Break.Set 0x08000000 /P /Onchip		;SPL_ENTRY
 ;Break.Set 0x08000092 /P /Onchip		;SPL asm icache_enable
 ;Break.Set 0x08000096 /P /Onchip		;SPL asm dcache_enable
