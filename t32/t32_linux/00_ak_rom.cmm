@@ -42,10 +42,27 @@ SYSTEM.up
 ;Break.Set 0x10010000--0x10010000 /ReadWrite /Onchip     ;reg
 ;Break.Set 0x00010000--0x00010000 /ReadWrite /Onchip     ;reg
 ;Break.Set 0x00001000--0x00001FFF /ReadWrite /Onchip     ;rom 1
-Break.Set 0x00001000--0x00001FFF /P /Onchip     ;rom 1
+;Break.Set 0x00001000--0x00001FFF /ReadWrite /Onchip     ;rom 1
+;Break.Set 0x00010E80--0x00013788 /ReadWrite /Onchip     ;rom 1
+;Break.Set 0x00010E80 /ReadWrite /Onchip     ;rom 1
+;Break.Set 0x00010E80 /Onchip     ;rom 1
+;Break.Set 0x00010140 /Onchip     ;rom 1
+
+
+
+;Break.Set 0x00001004 /P /Onchip     ;rom 1
+;Break.Set 0x00001204 /P /Onchip     ;rom 1
+;Break.Set 0x00001404 /P /Onchip     ;rom 1
+;Break.Set 0x00001604 /P /Onchip     ;rom 1
+;Break.Set 0x00001804 /P /Onchip     ;rom 1
+;Break.Set 0x00001A04 /P /Onchip     ;rom 1
+;Break.Set 0x00001C04 /P /Onchip     ;rom 1
+;Break.Set 0x00001E04 /P /Onchip     ;rom 1
+
 ;Break.Set 0x00010000--0x00010000 /P /Onchip     ;reg
 ;Break.Set 0x000100A8 /P /Onchip     ;reg
-Break.Set 0x000100C0 /P /Onchip     ;reg
+Break.Set 0x000100C0 /P /Onchip     ;reg good
+;Break.Set 0x000100D2 /P /Onchip     ;reg
 ;Break.Set 0x000100D0 /P /Onchip     ;reg out 1c
 ;Break.Set 0x000100DE /P /Onchip     ;reg out 1c
 ;Break.Set 0x000101A0 /P /Onchip     ;reg out 1c
@@ -72,12 +89,10 @@ Break.Set 0x000100C0 /P /Onchip     ;reg
 ;Break.Set 0x0800077C /P /Onchip		;SPL after spl_soc_init ddr init
 ;Break.Set spl_board_init_f+0x18 /P /Onchip	;SPL after spl_soc_init ddr init
 
-d.load.binary &uboot_spl_path/u-boot-spl-dtb.bin  0x08000000
+;d.load.binary &uboot_spl_path/u-boot-spl-dtb.bin  0x08000000
 
-;d.load.elf &uboot_spl_path/u-boot-spl /GNU /NOCODE /NoClear
-
-d.load.elf &uboot_spl_path/u-boot-spl /GNU /NOCODE /NoClear 
-sYmbol.SourcePATH.Translate "/armbian" "/media/mikey/AK-USER/build/github/build/ak/ak-build-22.06/build"
+;d.load.elf &uboot_spl_path/u-boot-spl /GNU /NOCODE /NoClear 
+;sYmbol.SourcePATH.Translate "/armbian" "/media/mikey/AK-USER/build/github/build/ak/ak-build-22.06/build"
 
 enddo
 Register.Set PC 0x08000000
