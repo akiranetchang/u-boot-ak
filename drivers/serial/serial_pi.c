@@ -74,6 +74,16 @@ static void _pi_serial_setbrg(struct uart_pi *regs,
 	writel((uart_min_clk_divisor(clock, baud)), &regs->div);
 }
 
+static void _pi_serial_setbrg_rom(struct uart_pi *regs,
+				  unsigned long clock, unsigned long baud)
+{
+#if 1 //def MIKEY
+	writel((uart_min_clk_divisor(clock, baud)), &regs->div);
+#else
+	//writel(0x48, &regs->div);
+	writel(0xE1, &regs->div);
+#endif
+}
 static void _pi_serial_init(struct uart_pi *regs)
 {
 	writel(UART_TXCTRL_TXEN, &regs->txctrl);
@@ -81,6 +91,12 @@ static void _pi_serial_init(struct uart_pi *regs)
 	writel(0, &regs->ie);
 }
 
+static void _pi_serial_init_rom(struct uart_pi *regs)
+{
+	writel(UART_TXCTRL_TXEN, &regs->txctrl);
+	writel(UART_RXCTRL_RXEN, &regs->rxctrl);
+	writel(0, &regs->ie);
+}
 static int _pi_serial_putc(struct uart_pi *regs, const char c)
 {
 	if (readl(&regs->txfifo) & UART_TXFIFO_FULL)
@@ -215,9 +231,12 @@ static inline void _debug_uart_init(void)
 	struct uart_pi *regs =
 			(struct uart_pi *)CONFIG_VAL(DEBUG_UART_BASE);
 
-	_pi_serial_setbrg(regs, CONFIG_DEBUG_UART_CLOCK,
+#ifdef MIKEY
+#else
+	_pi_serial_setbrg_rom(regs, CONFIG_DEBUG_UART_CLOCK,
 			      CONFIG_BAUDRATE);
-	_pi_serial_init(regs);
+	_pi_serial_init_rom(regs);
+#endif
 }
 
 static inline void _debug_uart_putc(int ch)

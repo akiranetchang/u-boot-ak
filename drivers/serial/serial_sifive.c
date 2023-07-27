@@ -74,7 +74,25 @@ static void _sifive_serial_setbrg(struct uart_sifive *regs,
 	writel((uart_min_clk_divisor(clock, baud)), &regs->div);
 }
 
+static void _sifive_serial_setbrg_rom(struct uart_sifive *regs,
+				  unsigned long clock, unsigned long baud)
+{
+#ifdef MIKEY
+	writel((uart_min_clk_divisor(clock, baud)), &regs->div);
+#else
+	//writel(0x48, &regs->div);
+	writel(0xE1, &regs->div);
+#endif
+}
+
 static void _sifive_serial_init(struct uart_sifive *regs)
+{
+	writel(UART_TXCTRL_TXEN, &regs->txctrl);
+	writel(UART_RXCTRL_RXEN, &regs->rxctrl);
+	writel(0, &regs->ie);
+}
+
+static void _sifive_serial_init_rom(struct uart_sifive *regs)
 {
 	writel(UART_TXCTRL_TXEN, &regs->txctrl);
 	writel(UART_RXCTRL_RXEN, &regs->rxctrl);
@@ -214,9 +232,12 @@ static inline void _debug_uart_init(void)
 	struct uart_sifive *regs =
 			(struct uart_sifive *)CONFIG_VAL(DEBUG_UART_BASE);
 
-	_sifive_serial_setbrg(regs, CONFIG_DEBUG_UART_CLOCK,
+#ifdef MIKEY
+#else
+	_sifive_serial_setbrg_rom(regs, CONFIG_DEBUG_UART_CLOCK,
 			      CONFIG_BAUDRATE);
-	_sifive_serial_init(regs);
+	_sifive_serial_init_rom(regs);
+#endif
 }
 
 static inline void _debug_uart_putc(int ch)
