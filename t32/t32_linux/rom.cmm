@@ -1,0 +1,3 @@
+
+data.save.Binary rom_0x1000.bin 0x00001000--0x00001FFF
+data.save.Binary rom_0x10000.bin 0x00010000--0x0017FFF
