@@ -70,6 +70,13 @@ config DESIGNWARE_WATCHDOG
 	  Enable this to support Designware Watchdog Timer IP, present e.g.
 	  on Altera SoCFPGA SoCs.
 
+config PI_WATCHDOG
+	bool "Pi watchdog timer support"
+	depends on WDT
+	help
+	  Enable this to support Pi Watchdog Timer IP, present e.g.
+	  on Altera SoCFPGA SoCs.
+
 config WDT
 	bool "Enable driver model for watchdog timer drivers"
 	depends on DM
