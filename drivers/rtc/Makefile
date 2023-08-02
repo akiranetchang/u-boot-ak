@@ -23,6 +23,7 @@ obj-$(CONFIG_RTC_DS174x) += ds174x.o
 obj-$(CONFIG_RTC_DS3231) += ds3231.o
 obj-$(CONFIG_RTC_DS3232) += ds3232.o
 obj-$(CONFIG_RTC_EMULATION) += emul_rtc.o
+obj-$(CONFIG_RTC_PI) += pi_rtc.o
 obj-$(CONFIG_RTC_FTRTC010) += ftrtc010.o
 obj-$(CONFIG_SANDBOX) += i2c_rtc_emul.o
 obj-$(CONFIG_RTC_IMXDI) += imxdi.o
