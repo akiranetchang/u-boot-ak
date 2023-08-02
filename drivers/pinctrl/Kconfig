@@ -333,6 +333,14 @@ config PINCTRL_K210
 	  supported function to any multifunctional IO pin. It can also perform
 	  basic GPIO functions, such as reading the current value of a pin.
 
+config PINCTRL_PI
+	bool "Pi Fully-Programmable Input/Output Array driver"
+	depends on DM && PINCTRL_GENERIC
+	help
+	  Support pin multiplexing on the Pi. The "FPIOA" can remap any
+	  supported function to any multifunctional IO pin. It can also perform
+	  basic GPIO functions, such as reading the current value of a pin.
+
 config PINCTRL_ZYNQMP
 	bool "Xilinx ZynqMP pin control driver"
 	depends on DM && PINCTRL_GENERIC && ARCH_ZYNQMP
