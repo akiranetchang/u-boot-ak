@@ -19,7 +19,7 @@
 #define DW_WDT_CR_RMOD_OFFSET	0x01
 #define DW_WDT_CRR_RESTART_VAL	0x76
 
-struct designware_wdt_priv {
+struct pi_wdt_priv {
 	void __iomem	*base;
 	unsigned int	clk_khz;
 	struct reset_ctl_bulk resets;
@@ -29,7 +29,7 @@ struct designware_wdt_priv {
  * Set the watchdog time interval.
  * Counter is 32 bit.
  */
-static int designware_wdt_settimeout(void __iomem *base, unsigned int clk_khz,
+static int pi_wdt_settimeout(void __iomem *base, unsigned int clk_khz,
 				     unsigned int timeout)
 {
 	signed int i;
@@ -43,37 +43,37 @@ static int designware_wdt_settimeout(void __iomem *base, unsigned int clk_khz,
 	return 0;
 }
 
-static void designware_wdt_enable(void __iomem *base)
+static void pi_wdt_enable(void __iomem *base)
 {
 	writel(BIT(DW_WDT_CR_EN_OFFSET), base + DW_WDT_CR);
 }
 
-static unsigned int designware_wdt_is_enabled(void __iomem *base)
+static unsigned int pi_wdt_is_enabled(void __iomem *base)
 {
 	return readl(base + DW_WDT_CR) & BIT(0);
 }
 
-static void designware_wdt_reset_common(void __iomem *base)
+static void pi_wdt_reset_common(void __iomem *base)
 {
-	if (designware_wdt_is_enabled(base))
+	if (pi_wdt_is_enabled(base))
 		/* restart the watchdog counter */
 		writel(DW_WDT_CRR_RESTART_VAL, base + DW_WDT_CRR);
 }
 
-static int designware_wdt_reset(struct udevice *dev)
+static int pi_wdt_reset(struct udevice *dev)
 {
-	struct designware_wdt_priv *priv = dev_get_priv(dev);
+	struct pi_wdt_priv *priv = dev_get_priv(dev);
 
-	designware_wdt_reset_common(priv->base);
+	pi_wdt_reset_common(priv->base);
 
 	return 0;
 }
 
-static int designware_wdt_stop(struct udevice *dev)
+static int pi_wdt_stop(struct udevice *dev)
 {
-	struct designware_wdt_priv *priv = dev_get_priv(dev);
+	struct pi_wdt_priv *priv = dev_get_priv(dev);
 
-	designware_wdt_reset(dev);
+	pi_wdt_reset(dev);
 	writel(0, priv->base + DW_WDT_CR);
 
         if (CONFIG_IS_ENABLED(DM_RESET)) {
@@ -91,24 +91,24 @@ static int designware_wdt_stop(struct udevice *dev)
 	return 0;
 }
 
-static int designware_wdt_start(struct udevice *dev, u64 timeout, ulong flags)
+static int pi_wdt_start(struct udevice *dev, u64 timeout, ulong flags)
 {
-	struct designware_wdt_priv *priv = dev_get_priv(dev);
+	struct pi_wdt_priv *priv = dev_get_priv(dev);
 
-	designware_wdt_stop(dev);
+	pi_wdt_stop(dev);
 
 	/* set timer in miliseconds */
-	designware_wdt_settimeout(priv->base, priv->clk_khz, timeout);
+	pi_wdt_settimeout(priv->base, priv->clk_khz, timeout);
 
-	designware_wdt_enable(priv->base);
+	pi_wdt_enable(priv->base);
 
 	/* reset the watchdog */
-	return designware_wdt_reset(dev);
+	return pi_wdt_reset(dev);
 }
 
-static int designware_wdt_probe(struct udevice *dev)
+static int pi_wdt_probe(struct udevice *dev)
 {
-	struct designware_wdt_priv *priv = dev_get_priv(dev);
+	struct pi_wdt_priv *priv = dev_get_priv(dev);
 	__maybe_unused int ret;
 
 	priv->base = dev_remap_addr(dev);
@@ -146,7 +146,7 @@ static int designware_wdt_probe(struct udevice *dev)
 	}
 
 	/* reset to disable the watchdog */
-	return designware_wdt_stop(dev);
+	return pi_wdt_stop(dev);
 
 err:
 #if CONFIG_IS_ENABLED(CLK)
@@ -155,23 +155,24 @@ err:
 	return ret;
 }
 
-static const struct wdt_ops designware_wdt_ops = {
-	.start = designware_wdt_start,
-	.reset = designware_wdt_reset,
-	.stop = designware_wdt_stop,
+static const struct wdt_ops pi_wdt_ops = {
+	.start = pi_wdt_start,
+	.reset = pi_wdt_reset,
+	.stop = pi_wdt_stop,
 };
 
-static const struct udevice_id designware_wdt_ids[] = {
+static const struct udevice_id pi_wdt_ids[] = {
 	{ .compatible = "snps,dw-wdt"},
+	{ .compatible = "pi,pi-wdt"},
 	{}
 };
 
-U_BOOT_DRIVER(designware_wdt) = {
-	.name = "designware_wdt",
+U_BOOT_DRIVER(pi_wdt) = {
+	.name = "pi_wdt",
 	.id = UCLASS_WDT,
-	.of_match = designware_wdt_ids,
-	.priv_auto	= sizeof(struct designware_wdt_priv),
-	.probe = designware_wdt_probe,
-	.ops = &designware_wdt_ops,
+	.of_match = pi_wdt_ids,
+	.priv_auto	= sizeof(struct pi_wdt_priv),
+	.probe = pi_wdt_probe,
+	.ops = &pi_wdt_ops,
 	.flags = DM_FLAG_PRE_RELOC,
 };
