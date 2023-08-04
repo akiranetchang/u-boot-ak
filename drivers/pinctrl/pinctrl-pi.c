@@ -625,7 +625,7 @@ static int k210_pc_pinconf_group_set(struct udevice *dev,
 }
 
 #ifdef CONFIG_CMD_PINMUX
-static int k210_pc_get_pin_muxing(struct udevice *dev, unsigned int selector,
+static int pi_pc_get_pin_muxing(struct udevice *dev, unsigned int selector,
 				  char *buf, int size)
 {
 	struct k210_pc_priv *priv = dev_get_priv(dev);
@@ -637,7 +637,7 @@ static int k210_pc_get_pin_muxing(struct udevice *dev, unsigned int selector,
 }
 #endif
 
-static const struct pinconf_param k210_pc_pinconf_params[] = {
+static const struct pinconf_param pi_pc_pinconf_params[] = {
 	{ "bias-disable", PIN_CONFIG_BIAS_DISABLE, 0 },
 	{ "bias-pull-down", PIN_CONFIG_BIAS_PULL_DOWN, 1 },
 	{ "bias-pull-up", PIN_CONFIG_BIAS_PULL_UP, 1 },
@@ -657,7 +657,7 @@ static const struct pinconf_param k210_pc_pinconf_params[] = {
 	{ "input-polarity-invert", PIN_CONFIG_INPUT_INVERT, 1},
 };
 
-static const struct pinctrl_ops k210_pc_pinctrl_ops = {
+static const struct pinctrl_ops pi_pc_pinctrl_ops = {
 #ifdef CONFIG_CMD_PINMUX
 	.get_pins_count = k210_pc_get_pins_count,
 	.get_pin_name = k210_pc_get_pin_name,
@@ -665,17 +665,17 @@ static const struct pinctrl_ops k210_pc_pinctrl_ops = {
 	.get_groups_count = k210_pc_get_groups_count,
 	.get_group_name = k210_pc_get_group_name,
 	.pinmux_property_set = k210_pc_pinmux_set,
-	.pinconf_num_params = ARRAY_SIZE(k210_pc_pinconf_params),
-	.pinconf_params = k210_pc_pinconf_params,
+	.pinconf_num_params = ARRAY_SIZE(pi_pc_pinconf_params),
+	.pinconf_params = pi_pc_pinconf_params,
 	.pinconf_set = k210_pc_pinconf_set,
 	.pinconf_group_set = k210_pc_pinconf_group_set,
 	.set_state = pinctrl_generic_set_state,
 #ifdef CONFIG_CMD_PINMUX
-	.get_pin_muxing = k210_pc_get_pin_muxing,
+	.get_pin_muxing = pi_pc_get_pin_muxing,
 #endif
 };
 
-static int k210_pc_probe(struct udevice *dev)
+static int pi_pc_probe(struct udevice *dev)
 {
 	int ret, i, j;
 	struct k210_pc_priv *priv = dev_get_priv(dev);
@@ -734,16 +734,17 @@ err:
 	return ret;
 }
 
-static const struct udevice_id k210_pc_ids[] = {
+static const struct udevice_id pi_pc_ids[] = {
 	{ .compatible = "canaan,k210-fpioa" },
+	{ .compatible = "pi,pi-fpioa" },
 	{ }
 };
 
-U_BOOT_DRIVER(pinctrl_k210) = {
-	.name = "pinctrl_k210",
+U_BOOT_DRIVER(pinctrl_pi) = {
+	.name = "pinctrl_pi",
 	.id = UCLASS_PINCTRL,
-	.of_match = k210_pc_ids,
-	.probe = k210_pc_probe,
+	.of_match = pi_pc_ids,
+	.probe = pi_pc_probe,
 	.priv_auto	= sizeof(struct k210_pc_priv),
-	.ops = &k210_pc_pinctrl_ops,
+	.ops = &pi_pc_pinctrl_ops,
 };
