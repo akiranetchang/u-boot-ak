@@ -13,9 +13,9 @@
 #include <timestamp.h>
 
 /**
- * struct emul_rtc - private data for emulated RTC driver
+ * struct pi_rtc - private data for emulated RTC driver
  */
-struct emul_rtc {
+struct pi_rtc {
 	/**
 	 * @offset_us: microseconds from 1970-01-01 to timer_get_us() base
 	 */
@@ -26,9 +26,9 @@ struct emul_rtc {
 	int isdst;
 };
 
-static int emul_rtc_get(struct udevice *dev, struct rtc_time *time)
+static int pi_rtc_get(struct udevice *dev, struct rtc_time *time)
 {
-	struct emul_rtc *priv = dev_get_priv(dev);
+	struct pi_rtc *priv = dev_get_priv(dev);
 	u64 now;
 
 	now = timer_get_us() + priv->offset_us;
@@ -39,9 +39,9 @@ static int emul_rtc_get(struct udevice *dev, struct rtc_time *time)
 	return 0;
 }
 
-static int emul_rtc_set(struct udevice *dev, const struct rtc_time *time)
+static int pi_rtc_set(struct udevice *dev, const struct rtc_time *time)
 {
-	struct emul_rtc *priv = dev_get_priv(dev);
+	struct pi_rtc *priv = dev_get_priv(dev);
 
 	if (time->tm_year < 1970)
 		return -EINVAL;
@@ -58,13 +58,13 @@ static int emul_rtc_set(struct udevice *dev, const struct rtc_time *time)
 	return 0;
 }
 
-int emul_rtc_probe(struct udevice *dev)
+int pi_rtc_probe(struct udevice *dev)
 {
-	struct emul_rtc *priv = dev_get_priv(dev);
+	struct pi_rtc *priv = dev_get_priv(dev);
 	const char *epoch_str;
 	u64 epoch;
 
-	epoch_str = env_get("rtc_emul_epoch");
+	epoch_str = env_get("rtc_emul_epoch"); // AK: rtc_pi_epoch
 
 	if (epoch_str) {
 		epoch = simple_strtoull(epoch_str, NULL, 10);
@@ -78,19 +78,19 @@ int emul_rtc_probe(struct udevice *dev)
 	return 0;
 }
 
-static const struct rtc_ops emul_rtc_ops = {
-	.get = emul_rtc_get,
-	.set = emul_rtc_set,
+static const struct rtc_ops pi_rtc_ops = {
+	.get = pi_rtc_get,
+	.set = pi_rtc_set,
 };
 
-U_BOOT_DRIVER(rtc_emul) = {
-	.name	= "rtc_emul",
+U_BOOT_DRIVER(rtc_pi) = {
+	.name	= "rtc_pi",
 	.id	= UCLASS_RTC,
-	.ops	= &emul_rtc_ops,
-	.probe	= emul_rtc_probe,
-	.priv_auto	= sizeof(struct emul_rtc),
+	.ops	= &pi_rtc_ops,
+	.probe	= pi_rtc_probe,
+	.priv_auto	= sizeof(struct pi_rtc),
 };
 
-U_BOOT_DRVINFO(rtc_emul) = {
-	.name	= "rtc_emul",
+U_BOOT_DRVINFO(rtc_pi) = {
+	.name	= "rtc_pi",
 };
