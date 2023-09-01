@@ -60,6 +60,8 @@
  */
 #define ROUND_SHIFT			20
 
+#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
+
 /*
  * Private functions
  */
@@ -221,12 +223,13 @@ static int __wrpll_update_parent_rate(struct wrpll_cfg *c,
 int wrpll_configure_for_rate(struct wrpll_cfg *c, u32 target_rate,
 			     unsigned long parent_rate)
 {
-	unsigned long ratio;
+D	unsigned long ratio;
 	u64 target_vco_rate, delta, best_delta, f_pre_div, vco, vco_pre;
 	u32 best_f, f, post_divr_freq;
 	u8 fbdiv, divq, best_r, r;
 	int range;
 
+D	printf("AK: target_rate(%d), parent_rate(%d)\n",target_rate,parent_rate);
 	if (c->flags == 0) {
 		WARN(1, "%s called with uninitialized PLL config", __func__);
 		return -EINVAL;
@@ -333,7 +336,7 @@ unsigned long wrpll_calc_output_rate(const struct wrpll_cfg *c,
 	u8 fbdiv;
 	u64 n;
 
-	if (c->flags & WRPLL_FLAGS_EXT_FEEDBACK_MASK) {
+D	if (c->flags & WRPLL_FLAGS_EXT_FEEDBACK_MASK) {
 		WARN(1, "external feedback mode not yet supported");
 		return ULONG_MAX;
 	}

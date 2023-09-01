@@ -85,6 +85,8 @@ static void __prci_wrpll_unpack(struct wrpll_cfg *c, u32 r)
 {
 D	u32 v;
 
+D	printf("AK: r[%x] divr(%d) divf(%d) divq(%d) range(%d)\n",r,c->divr,c->divf,c->divq,c->range);
+
 	v = r & PRCI_COREPLLCFG0_DIVR_MASK;
 	v >>= PRCI_COREPLLCFG0_DIVR_SHIFT;
 	c->divr = v;
@@ -106,6 +108,7 @@ D	u32 v;
 
 	/* external feedback mode not supported */
 	c->flags |= WRPLL_FLAGS_INT_FEEDBACK_MASK;
+D	printf("AK: r[%x] divr(%d) divf(%d) divq(%d) range(%d)\n",r,c->divr,c->divf,c->divq,c->range);
 }
 
 /**
@@ -126,6 +129,7 @@ D	u32 v;
 static u32 __prci_wrpll_pack(const struct wrpll_cfg *c)
 {
 D	u32 r = 0;
+D	printf("AK: r[%x] divr(%d) divf(%d) divq(%d) range(%d)\n",r,c->divr,c->divf,c->divq,c->range);
 
 	r |= c->divr << PRCI_COREPLLCFG0_DIVR_SHIFT;
 	r |= c->divf << PRCI_COREPLLCFG0_DIVF_SHIFT;
@@ -135,6 +139,7 @@ D	u32 r = 0;
 	/* external feedback mode not supported */
 	r |= PRCI_COREPLLCFG0_FSE_MASK;
 
+D	printf("AK: r[%x] divr(%d) divf(%d) divq(%d) range(%d)\n",r,c->divr,c->divf,c->divq,c->range);
 	return r;
 }
 
@@ -226,6 +231,7 @@ D	struct __prci_wrpll_data *pwd = pc->pwd;
 	r = wrpll_configure_for_rate(&pwd->c, rate, parent_rate);
 	if (r)
 		return r;
+D	printf("r [%x] rate(%ld) parent_rate(%ld)\n",r,rate,parent_rate);
 
 	if (pwd->enable_bypass)
 		pwd->enable_bypass(pd);

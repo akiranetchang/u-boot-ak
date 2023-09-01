@@ -8,7 +8,28 @@
 / {
 	cpus {
 		assigned-clocks = <&prci FU740_PRCI_CLK_COREPLL>;
-		assigned-clock-rates = <1200000000>;
+		/* assigned-clock-rates = <1500000000>; */ /* 20c8e00 */
+		/* assigned-clock-rates = <1000000000>; */ /* 20d12c0 */
+		/* assigned-clock-rates =  <500000000>; */ /* 20d92c0 */
+		/* assigned-clock-rates =  <250000000>; */ /* 20e12c0 */
+		/* assigned-clock-rates =  <125000000>; */ /* 20e92c0 */
+		/* assigned-clock-rates =   <62500000>; */ /* 2072282 */
+		/* assigned-clock-rates = <1200000000>; */ /* 20544c2 */
+		/* assigned-clock-rates =  <600000000>; */ /* 205c4c2 */
+		/* assigned-clock-rates =  <300000000>; */ /* 20644c2 */
+		/* assigned-clock-rates =  <150000000>; */ /* 206c4c2 */
+		/* assigned-clock-rates =   <75000000>; */ /* 20744c2 */
+		/* assigned-clock-rates =   <25000000>; */ /* 2072282 */
+		/* assigned-clock-rates =   <13000000>; */ /* 2072282 */
+		/* assigned-clock-rates =   <26000000>; */ /* 20187c1 */
+		/* assigned-clock-rates =   <50000000>; */ /* 2072282 */
+		/* assigned-clock-rates =   <52000000>; */ /* 2072282 */
+		/* assigned-clock-rates =  <100000000>; */ /* 20e8f00 */
+		/* assigned-clock-rates =  <200000000>; */ /* 20e0f00 */
+		/* assigned-clock-rates =  <400000000>; */ /* 20d8f00 */
+		/* assigned-clock-rates =  <800000000>; */ /* 20d0f00 */
+		/* assigned-clock-rates = <1600000000>; */ /* 20c8f00 bad */
+		 assigned-clock-rates = <1200000000>; 
 		u-boot,dm-spl;
 		cpu0: cpu@0 {
 			clocks = <&prci FU740_PRCI_CLK_COREPLL>;

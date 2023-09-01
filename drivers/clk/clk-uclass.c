@@ -25,6 +25,8 @@
 #include <linux/clk-provider.h>
 #include <linux/err.h>
 
+#define	D	printf("AK:__%d__:(%s:%s)\n",__LINE__,__func__,__FILE__);
+
 static inline const struct clk_ops *clk_dev_ops(struct udevice *dev)
 {
 	return (const struct clk_ops *)dev->driver->ops;
@@ -286,8 +288,13 @@ static int clk_set_default_parents(struct udevice *dev,
 	return 0;
 }
 
+#ifdef AK
 static int clk_set_default_rates(struct udevice *dev,
 				 enum clk_defaults_stage stage)
+#else
+int clk_set_default_rates(struct udevice *dev,
+				 enum clk_defaults_stage stage)
+#endif
 {
 	struct clk clk, *c;
 	int index;
@@ -296,7 +303,7 @@ static int clk_set_default_rates(struct udevice *dev,
 	int ret = 0;
 	u32 *rates = NULL;
 
-	size = dev_read_size(dev, "assigned-clock-rates");
+D	size = dev_read_size(dev, "assigned-clock-rates");
 	if (size < 0)
 		return 0;
 

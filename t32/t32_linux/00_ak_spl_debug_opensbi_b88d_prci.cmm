@@ -1,0 +1,327 @@
+
+
+local &topdir
+local &cwd
+local &cur_dir
+local &opensbi_path
+local &ak_spl_path
+local &uboot_spl_path
+local &uboot_path
+local &linux_path
+
+&cwd=os.pwd()
+&cur_dir=os.ppd()    	; directory where this script is running from
+&topdir="&cwd/../.."
+
+&opensbi_path="&cur_dir/../../cache/sources/opensbi/v1.2-pi/build/platform/generic/firmware"
+
+&uboot_spl_path="&cur_dir/../../b88d-build/spl"
+
+&uboot_path="&cur_dir/../../b88d-build/"
+
+;
+&ak_spl_path="&cur_dir/../ak_image/build/spl"
+
+print "MIKEY cwd:&cwd"
+print "MIKEY cur_dir:&cur_dir"
+print "MIKEY AK:&ak_spl_path"
+print "MIKEY:&uboot_spl_path"
+ 
+PRINT "resetting..."
+
+RESet
+SYStem.Reset
+SYStem.CPU FU740-C000-U74
+SYSTEM.JtagClock 20.0MHz
+system.memaccess StopAndGo
+SYSTEM.up
+
+Data.dump 0x10000000 /SpotLight
+
+;power on reset cpu core 26Mhz
+;AK: r[30187c1] divr(1) divf(31) divq(3) range(0)
+
+;ddr
+;AK: r[20d1180] divr(0) divf(70) divq(2) range(3)
+
+;CPU core_pllcfg 1500000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820c8e00
+;AK: r[20c8e00] divr(0) divf(56) divq(1) range(3)
+
+;CPU core_pllcfg 1000000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820d12c0
+;AK: r[20d12c0] divr(0) divf(75) divq(2) range(3)
+
+;CPU core_pllcfg  500000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820d92c0
+;AK: r[20d92c0] divr(0) divf(75) divq(3) range(3) 
+
+;CPU core_pllcfg  250000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820e12c0
+;AK: r[20e12c0] divr(0) divf(75) divq(4) range(3) 
+
+;CPU core_pllcfg  125000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820e92c0
+;AK: r[20e92c0] divr(0) divf(75) divq(5) range(3)
+
+;CPU core_pllcfg   62500000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x82072282
+;AK: r[2072282] divr(2) divf(138) divq(6) range(1) 
+
+;CPU core_pllcfg 1200000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820544c2
+;AK: r[20544c2] divr(2) divf(275) divq(2) range(1) 
+
+;CPU core_pllcfg  600000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x8205c4c2
+;AK: r[205c4c2] divr(2) divf(275) divq(3) range(1)
+
+;CPU core_pllcfg  300000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820644c2
+;AK: r[20644c2] divr(2) divf(275) divq(4) range(1)
+
+;CPU core_pllcfg  150000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x8206c4c2
+;AK: r[206c4c2] divr(2) divf(275) divq(5) range(1) 
+
+;CPU core_pllcfg   75000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820744c2
+;AK: r[20744c2] divr(2) divf(275) divq(6) range(1)
+
+;CPU core_pllcfg   25000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x82072282
+;AK: r[2072282] divr(2) divf(138) divq(6) range(1)
+
+;CPU core_pllcfg   13000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x82072282
+;AK: r[2072282] divr(2) divf(138) divq(6) range(1)
+
+;CPU core_pllcfg   26000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820187c1
+;AK: r[20187c1] divr(1) divf(31) divq(3) range(0)
+
+;CPU core_pllcfg   50000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x82072282
+;AK: r[2072282] divr(2) divf(138) divq(6) range(1)
+
+;CPU core_pllcfg   52000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x82072282
+;AK: r[2072282] divr(2) divf(138) divq(6) range(1)
+
+;CPU core_pllcfg  100000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820544C2
+;AK: r[20e8f00] divr(0) divf(60) divq(5) range(3)
+
+;CPU core_pllcfg  200000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820e0f00
+;AK: r[20e0f00] divr(0) divf(60) divq(4) range(3)
+
+;CPU core_pllcfg  400000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820d8f00
+;AK: r[20d8f00] divr(0) divf(60) divq(3) range(3)
+
+;CPU core_pllcfg  800000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820d0f00
+;AK: r[20d0f00] divr(0) divf(60) divq(2) range(3)
+
+;CPU core_pllcfg 1600000000 Hz
+;Data.Set MD:0x10000004 %LE %Long 0x820c8f00
+;AK: r[20c8f00] divr(0) divf(60) divq(1) range(3)
+
+
+
+Data.Set MD:0x10000050 %LE %Long 0x82063BC2
+Data.Set MD:0x10000054 %LE %Long 0x80000000
+Data.Set MD:0x10000058 %LE %Long 0x00000000
+
+;Break.Set 0x08000000 /P /Onchip		;SPL_ENTRY
+;Break.Set 0x08000092 /P /Onchip		;SPL asm icache_enable
+;Break.Set 0x08000096 /P /Onchip		;SPL asm dcache_enable
+;Break.Set 0x080001DE /P /Onchip		;SPL arch_cpu_init_dm
+;Break.Set 0x080004D8 /P /Onchip		;SPL board_init_f
+;Break.Set 0x080007EC /P /Onchip		;SPL board_init_f u74
+;Break.Set 0x08000856 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x0800085A /P /Onchip		;SPL board_init_f log
+Break.Set 0x080007F0 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x080019DE /P /Onchip		;SPL board_init_f_alloc_reserve log
+;Break.Set 0x080008A2 /P /Onchip		;SPL board_init_f log
+;Break.Set 0x080009A4 /P /Onchip		;SPL spl_early_init
+;Break.Set 0x0800087E /P /Onchip		;SPL spl_common_init
+;Break.Set 0x080065B2 /P /Onchip		;SPL dm_init_and_scan
+;Break.Set 0x080065C2 /P /Onchip		;SPL dm_scan
+;Break.Set 0x0800651C /P /Onchip		;SPL dm_scan_plat
+;Break.Set 0x0800031E /P /Onchip		;SPL spl_soc_init before ddr init
+;Break.Set 0x080007AC /P /Onchip		;SPL after spl_soc_init ddr init
+;Break.Set 0x0800077C /P /Onchip		;SPL after spl_soc_init ddr init
+;Break.Set spl_board_init_f+0x18 /P /Onchip	;SPL after spl_soc_init ddr init
+
+d.load.binary &uboot_spl_path/u-boot-spl-dtb.bin  0x08000000
+
+;d.load.elf &uboot_spl_path/u-boot-spl /GNU /NOCODE /NoClear
+
+d.load.elf &uboot_spl_path/u-boot-spl /GNU /NOCODE /NoClear 
+sYmbol.SourcePATH.Translate "/armbian" "/media/mikey/AK-USER/build/github/build/ak/ak-build-22.06/build"
+
+Register.Set PC 0x08000000
+;enddo
+
+go
+WAIT !STATE.RUN()
+;Break.Delete 0x08000000        ;delete breakpoint
+;Break.Delete 0x080001DE        ;delete breakpoint
+;Break.Delete 0x080004D8 	;delete breakpoint
+;Break.Delete 0x080007EC 	;delete breakpoint
+;Break.Delete 0x08000856 	;delete breakpoint
+Break.Delete 0x0800085A 	;delete breakpoint
+;Break.Delete 0x080008A2 	;delete breakpoint
+;Break.Delete 0x0800031E        ;delete breakpoint
+;Break.Delete 0x0800077C        ;delete breakpoint
+;Break.Delete spl_board_init_f+0x18       ;delete breakpoint
+;Break.Delete 0x080007AC        ;delete breakpoint
+
+
+;Break.Set 0x080008C2 /P /Onchip	;SPL spl_boot_device
+;Break.Set spl_boot_device /P /Onchip	;SPL spl_boot_device
+
+;arch/riscv/cpu/start.S
+;common/init/board_init.c
+Break.Set board_init_f_alloc_reserve /P	;SPL
+Break.Set harts_early_init /P	;SPL
+
+Break.Set board_init_f /P	;SPL
+Break.Set spl_early_init /P	;SPL
+
+Break.Set spl_common_init /P	;SPL
+;Break.Set bootstage_init /P	;SPL
+;Break.Set bootstage_start /P	;SPL
+Break.Set fdtdec_setup /P	;SPL
+Break.Set dm_init_and_scan /P	;SPL
+Break.Set dm_init /P	;SPL
+;Break.Set dm_scan /P	;SPL
+
+Break.Set spl_board_init_f /P	;SPL
+Break.Set spl_soc_init /P	;SPL
+;Break.Set board_fdt_blob_setup /P	;SPL
+;Break.Set board_init /P	;SPL
+;Break.Set enable_caches /P	;SPL
+
+Break.Set clk_set_default_rates /P	;SPL
+Break.Set wrpll_configure_for_rate /P	;SPL
+
+;
+;;
+;
+
+Break.Set device_bind_by_name /P	;SPL
+Break.Set device_probe /P	;SPL
+Break.Set dm_scan_plat /P	;SPL
+Break.Set lists_bind_drivers /P	;SPL
+Break.Set dm_extended_scan /P	;SPL
+Break.Set dm_scan_fdt /P	;SPL
+Break.Set dm_scan_fdt_node /P	;SPL
+Break.Set lists_bind_fdt /P	;SPL
+;Break.Set sifive_reset_bind /P	;SPL u74
+Break.Set pi_reset_bind /P	;SPL
+Break.Set device_bind_driver_to_node /P	;SPL
+;Break.Set lists_drivers_lookup_name /P	;SPL
+Break.Set device_bind_common /P	;SPL
+Break.Set uclass_get /P	;SPL
+Break.Set dev_set_plat /P	;SPL
+;Break.Set dev_set_ofnode /P	;SPL
+Break.Set uclass_bind_device /P	;SPL
+Break.Set dm_scan_other /P	;SPL
+Break.Set dm_probe_devices /P	;SPL
+Break.Set device_probe /P	;SPL
+Break.Set uclass_first_device /P	;SPL
+
+;
+;;
+;
+;Break.Set sifive_clk_bind /P	;SPL u74
+Break.Set pi_clk_bind /P	;SPL
+Break.Set riscv_cpu_probe /P	;SPL
+Break.Set cpu_probe_all /P	;SPL
+;Break.Set sifive_prci_probe /P	;SPL
+Break.Set pi_prci_probe /P	;SPL
+Break.Set sifive_clint_probe /P	;SPL
+Break.Set pi_reset_request /P	;SPL
+;Break.Set sifive_prci_ddr_release_reset /P	;SPL
+Break.Set pi_prci_ddr_release_reset /P	;SPL
+Break.Set __prci_consumer_reset /P	;SPL
+;Break.Set sifive_gpio_of_to_plat /P	;SPL
+Break.Set pi_gpio_of_to_plat /P	;SPL
+
+Break.Set preloader_console_init /P	;SPL
+Break.Set serial_init /P	;SPL
+;Break.Set sifive_serial_probe /P	;SPL
+Break.Set pi_serial_probe /P	;SPL
+
+Break.Set spl_board_init_f /P	;SPL
+;Break.Set sifive_ddr_probe /P	;SPL
+Break.Set pi_ddr_probe /P	;SPL
+;Break.Set sifive_reset_probe /P	;SPL
+Break.Set pi_reset_probe /P	;SPL
+;Break.Set sifive_gpio_probe /P	;SPL
+
+Break.Set pi_gpio_probe /P	;SPL
+Break.Set pi_gpio_get_function /P	;SPL
+Break.Set pi_gpio_direction_input /P	;SPL
+Break.Set pi_gpio_direction_output /P	;SPL
+Break.Set pi_gpio_get_value /P	;SPL
+Break.Set pi_gpio_set_value /P	;SPL
+Break.Set pi_gpio_of_to_plat /P	;SPL
+
+
+Break.Set board_init_r /P	;SPL
+Break.Set timer_init /P	;SPL
+
+;Break.Set dm_gpio_request /P	;SPL
+Break.Set 0x0800734C /P	;SPL ops->request
+
+Break.Set riscv_cpu_setup /P	;SPL
+
+
+;Break.Set sifive_spi_probe /P	;SPL
+Break.Set pi_spi_probe /P	;SPL
+
+
+
+
+;
+;;
+;
+Break.Set spl_boot_device /P	;SPL spl_boot_device
+Break.Set spl_mmc_load /P	;SPL spl_mmc_load
+;Break.Set spl_ram_load_image /P	;SPL spl_ram_load_image
+Break.Set spl_invoke_opensbi /P	;SPL spl_invoke_opensbi
+Break.Set spl_invoke_opensbi+0x19E /P	;SPL spl_invoke_opensbi
+;Break.Set 0x80000000 /P /Onchip	;opensbi _start can not break
+Break.Set     0x800014BE /P /Onchip	;opensbi sbi_init
+
+enddo
+
+d.load.binary &uboot_path/u-boot.itb  0x84000000 /NoClear
+
+d.load.elf &opensbi_path/fw_dynamic.elf /GNU /NOCODE /NoClear
+
+;u-boot-spl.lds
+;MEMORY { .spl_mem : ORIGIN = 0x08000000, LENGTH = 0x00100000 }
+;MEMORY { .bss_mem : ORIGIN = 0x85000000, LENGTH = 0x00100000 }
+; so 0x85000000 will be bss_mem can not use
+
+;
+;;
+;
+;d.load.binary /media/mikey/AK-USER/build/github/build/wrt-trace32/build_dir/target-riscv64_riscv64_musl/linux-riscv64/sifive_unmatched-fit-uImage.itb 0x84200000 /NoClear
+;
+;;
+;
+;d.load.binary /media/mikey/AK-USER/build/github/build/ak_sign/signed/u-boot-spl-stripped.new 0x87000000 /NoClear
+;d.load.binary /media/mikey/AK-USER/build/github/build/ak_sign/signed/ak-boot.img 0x87000000 /NoClear
+;
+;;
+;
+;d.load.binary /media/mikey/AK-USER/build/github/build/wrt-trace32/t32/riscv/boot-t32.scr  0x88100000 /NoClear
+
+
+ENDDO
