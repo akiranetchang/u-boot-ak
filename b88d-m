@@ -1,0 +1,7 @@
+. ./s.env
+
+rm -rf b88d-build
+mkdir -p b88d-build
+#make O=b88d-build pi_b88_defconfig
+make O=b88d-build pi_b88d_defconfig
+#make O=b88d-build menuconfig

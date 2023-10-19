@@ -545,6 +545,87 @@ static void sifive_pdma_register_types(void)
 type_init(sifive_pdma_register_types)
 #endif /*AK*/
 
+int dmacpy(void *dest, void *src, size_t count) {
+#ifdef AK
+	volatile fsl_dma_t *dma = &dma_base->dma[0];
+	uint xfer_size;
+	while (count) {
+		xfer_size = min(FSL_DMA_MAX_SIZE, count);
+		out_dma32(&dma->dar, (u32) (dest & 0xFFFFFFFF));
+		out_dma32(&dma->sar, (u32) (src & 0xFFFFFFFF));
+		out_dma32(&dma->satr,
+			in_dma32(&dma->satr) | (u32)((u64)src >> 32));
+		out_dma32(&dma->datr,
+			in_dma32(&dma->datr) | (u32)((u64)dest >> 32));
+		out_dma32(&dma->bcr, xfer_size);
+		dma_sync();
+		/* Prepare mode register */
+		out_dma32(&dma->mr, FSL_DMA_MR_DEFAULT);
+		dma_sync();
+		/* Start the transfer */
+		out_dma32(&dma->mr, FSL_DMA_MR_DEFAULT | FSL_DMA_MR_CS);
+		count -= xfer_size;
+		src += xfer_size;
+		dest += xfer_size;
+		dma_sync();
+		if (dma_check())
+			return -1;
+	}
+#else
+printf("AK:%s: dst[%lx] src[%lx] count[%lx]\n", __func__, dest, src, count); 
+#endif
+	return 0;
+}
+
+
+static int do_dma_cp(struct cmd_tbl *cmdtp, int flag, int argc,
+		     char *const argv[])
+{
+	ulong	addr, dest, count;
+	void	*src, *dst;
+	int	size;
+
+	if (argc != 4)
+		return CMD_RET_USAGE;
+
+	/* Check for size specification.
+	*/
+	if ((size = cmd_get_data_size(argv[0], 4)) < 0)
+		return 1;
+
+	addr = hextoul(argv[1], NULL);
+	addr += base_address;
+
+	dest = hextoul(argv[2], NULL);
+	dest += base_address;
+
+	count = hextoul(argv[3], NULL);
+
+	if (count == 0) {
+		puts ("Zero length ???\n");
+		return 1;
+	}
+
+	src = map_sysmem(addr, count * size);
+	dst = map_sysmem(dest, count * size);
+
+#ifdef AK
+	memcpy(dst, src, count * size);
+#else
+	dmacpy(dst, src, count * size);
+#endif
+
+	unmap_sysmem(src);
+	unmap_sysmem(dst);
+	return 0;
+}
+
+U_BOOT_CMD(
+	dmacp,	4,	1,	do_dma_cp,
+	"dma copy",
+	"[.b, .w, .l" HELP_Q "] source target count"
+);
+
 #endif /*AK*/
 
 /* Memory Display

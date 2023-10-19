@@ -1,0 +1,12 @@
+. s.env
+
+#./m
+
+#make O=build -j48 2>&1 | tee -a m1121.txt
+#make O=build -j48 2>&1 | tee -a m1215.txt
+#make O=build -j48 2>&1 | tee -a m1216.txt
+#make O=build -j48 2>&1 | tee -a m1220.txt
+#make O=build -j48 2>&1 | tee -a m0117.txt
+make O=u74-build -j4 2>&1 | tee -a u74-m0717.txt
+
+#./c

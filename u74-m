@@ -1,0 +1,6 @@
+. ./s.env
+
+rm -rf u74-build
+mkdir -p u74-build
+make O=u74-build sifive_unmatched_defconfig
+#make O=build menuconfig
